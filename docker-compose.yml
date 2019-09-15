@@ -1,0 +1,14 @@
+version: "3"
+services:
+  mentor-server:
+    image: mentor-server:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "4000:80"
+    networks:
+      - skynet
+networks:
+  skynet:

@@ -1,36 +1,18 @@
 node {
-    
-    goRoot='/usr/local/go'
-    goPath='/root/go'
-    path = env.PATH
-    
 
-    withEnv(["GOROOT=${goRoot}","GOPATH=${goPath}", "PATH=${goRoot}/bin:${goPath}/bin:${path}"]) {
+    stage('pull changes') {
+        git 'https://github.com/ottmartens/mentor-server'
+    }
         
-        stage('verifying environment') {
-            
-            sh 'go version'
-
-        }
-        
-        stage('pull changes') {
-            git 'https://github.com/ottmartens/mentor-server'
-        }
-        
-        stage('tests') {
-            echo 'no tests configured!'
-        }
-        
-        stage('build') {
-            sh 'go build -o mentor-server'
-            sh 'ls'
-        }
-        
-        stage('deploy & reload service') {
-            sh '/bin/systemctl stop mentor-server.service'
-            sh 'cp mentor-server /var/www/mentor-server'
-            sh '/bin/systemctl start mentor-server.service'
-        }
+    stage('tests') {
+        echo 'no tests configured!'
     }
     
+    stage('build Docker image') {
+        sh 'docker build -t mentor-server .'
+    }
+    
+    stage('deploy & reload service') {
+        sh 'docker stack deploy -c docker-compose.yml mentor-server'
+    }
 }
