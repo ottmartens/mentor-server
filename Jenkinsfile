@@ -11,8 +11,22 @@ node {
     stage('build Docker image') {
         sh 'docker build -t mentor-server .'
     }
+
+    stage('push image to local registry') {
+        sh 'docker tag mentor-server localhost:5000/mentor-server-local'
+        sh 'docker push localhost:5000/mentor-server-local'
+    }
+
+    stage('remove old local images') {
+        sh 'docker image remove mentor-server'
+        sh 'docker image remove localhost:5000/mentor-server-local'
+    }
+
+    stage('pull new local image') {
+        sh 'docker pull localhost:5000/mentor-server-local'
+    }
     
     stage('deploy & reload service') {
-        sh 'docker stack deploy -c docker-compose.yml mentor-server'
+        sh 'docker stack deploy -c docker-compose.yml localhost:5000/mentor-server-local'
     }
 }

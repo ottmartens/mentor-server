@@ -1,7 +1,7 @@
 version: "3"
 services:
   mentor-server:
-    image: mentor-server:latest
+    image: localhost:5000/mentor-server-local
     deploy:
       replicas: 2
       restart_policy:
