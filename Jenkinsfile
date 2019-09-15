@@ -21,12 +21,8 @@ node {
         sh 'docker image remove mentor-server'
         sh 'docker image remove localhost:5000/mentor-server-local'
     }
-
-    stage('pull new local image') {
-        sh 'docker pull localhost:5000/mentor-server-local'
-    }
     
     stage('deploy & reload service') {
-        sh 'docker stack deploy -c docker-compose.yml localhost:5000/mentor-server-local'
+        sh 'docker stack deploy -c docker-compose.yml mentor-server'
     }
 }
