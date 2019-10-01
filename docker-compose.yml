@@ -9,6 +9,10 @@ services:
     ports:
       - "4000:80"
     networks:
-      - skynet
+      - backend
+  db:
+    image: postgres:11
+    ports:
+      - "5432:5432"
 networks:
-  skynet:
+  backend:
