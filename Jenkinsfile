@@ -23,6 +23,6 @@ node {
     }
     
     stage('deploy & reload service') {
-        sh 'docker stack deploy -c docker-compose.yml mentor-server'
+        sh 'docker stack deploy -c docker-compose.yml mentor'
     }
 }
