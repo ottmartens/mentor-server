@@ -32,9 +32,12 @@ node {
             string(credentialsId: 'POSTGRES_DB', variable: 'POSTGRES_DB')]) {
             
             sh 'printenv'
+
             sh 'docker stack deploy -c docker-compose.yml mentor'
 
         }
+
+        sh 'printenv'
         // environment {
         //     POSTGRES_USER=credentials('POSTGRES_USER')
         //     POSTGRES_PASSWORD=credentials('POSTGRES_PASSWORD')
