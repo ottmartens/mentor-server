@@ -23,6 +23,12 @@ node {
     }
     
     stage('deploy & reload service') {
+        environment {
+            POSTGRES_USER=credentials('POSTGRES_USER')
+            POSTGRES_PASSWORD=credentials('POSTGRES_PASSWORD')
+            POSTGRES_DB=credentials('POSTGRES_DB')
+        }
+        sh 'printenv'
         sh 'docker stack deploy -c docker-compose.yml mentor'
     }
 }

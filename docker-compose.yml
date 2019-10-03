@@ -10,5 +10,19 @@ services:
       - "4000:80"
     networks:
       - backend
+  mentor-db:
+    image: postgres:11
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - backend
 networks:
   backend:
