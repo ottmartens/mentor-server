@@ -21,14 +21,27 @@ node {
         sh 'docker image remove mentor-server'
         sh 'docker image remove localhost:5000/mentor-server-local'
     }
+
     
     stage('deploy & reload service') {
+
+
+        // withCredentials([
+        //     string(credentialsId: 'POSTGRES_USER', variable: 'POSTGRES_USER'),
+        //     string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD'),
+        //     string(credentialsId: 'POSTGRES_DB', variable: 'POSTGRES_DB')]) {
+                
+        // }
         environment {
             POSTGRES_USER=credentials('POSTGRES_USER')
             POSTGRES_PASSWORD=credentials('POSTGRES_PASSWORD')
             POSTGRES_DB=credentials('POSTGRES_DB')
         }
-        sh 'printenv'
+
+        echo '$POSTGRES_USER'
+        echo '${POSTGRES_USER}'
+        
+        sh 'echo $POSTGRES_USER'
         sh 'docker stack deploy -c docker-compose.yml mentor'
     }
 }
