@@ -30,17 +30,15 @@ node {
             string(credentialsId: 'POSTGRES_USER', variable: 'POSTGRES_USER'),
             string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD'),
             string(credentialsId: 'POSTGRES_DB', variable: 'POSTGRES_DB')]) {
-            echo '$POSTGRES_USER'
-            echo '${POSTGRES_USER}'
-            sh 'echo $POSTGRES_USER'
+            
+            sh 'printenv'
+            sh 'docker stack deploy -c docker-compose.yml mentor'
+
         }
         // environment {
         //     POSTGRES_USER=credentials('POSTGRES_USER')
         //     POSTGRES_PASSWORD=credentials('POSTGRES_PASSWORD')
         //     POSTGRES_DB=credentials('POSTGRES_DB')
         // }
-
-        
-        sh 'docker stack deploy -c docker-compose.yml mentor'
     }
 }
