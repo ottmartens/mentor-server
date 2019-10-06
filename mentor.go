@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./models"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,8 +12,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	fmt.Sprint(models.GetDB());
 	http.HandleFunc("/", handler)
-	fmt.Println("Listening on port 80")
-	log.Fatal(http.ListenAndServe(":80", nil))
+	fmt.Println("Listening on port 8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
