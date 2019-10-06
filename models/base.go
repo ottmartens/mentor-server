@@ -1,11 +1,11 @@
 package models
 
 import (
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/jinzhu/gorm"
-	"os"
-	"github.com/joho/godotenv"
 	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
+	"os"
 )
 
 var db *gorm.DB
@@ -13,6 +13,7 @@ var db *gorm.DB
 func init() {
 
 	e := godotenv.Load()
+
 	if e != nil {
 		fmt.Print(e)
 	}
@@ -20,18 +21,19 @@ func init() {
 	username := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
-	dbHost :=os.Getenv("DB_HOST")
+	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 
-	dbUri := fmt.Sprint("host=%s port=%s dbname=%s sslmode=disable user=%s password=%s", dbHost, dbPort, dbName, username, password)
+	dbUri := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", dbHost, dbPort, username, dbName, password)
 
 	fmt.Println(dbUri)
 
 	conn, err := gorm.Open("postgres", dbUri)
 
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println("Error connecting to database: ", err)
 	}
+	fmt.Println(conn)
 
 	db = conn
 	//db.Debug().AutoMigrate(...)

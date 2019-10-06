@@ -1,14 +1,14 @@
 package app
 
 import (
-	"net/http"
-	u "../utils"
-	"strings"
-	"../models"
-	jwt "github.com/dgrijalva/jwt-go"
-	"os"
 	"context"
 	"fmt"
+	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/ottmartens/mentor-server/models"
+	u "github.com/ottmartens/mentor-server/utils"
+	"net/http"
+	"os"
+	"strings"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -38,7 +38,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		if len(splitted) != 2 {
 			response = u.Message(false, "Invalid/Malformed auth token")
 			w.WriteHeader(http.StatusForbidden)
-			u.Respond(w, response);
+			u.Respond(w, response)
 			return
 		}
 

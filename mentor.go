@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./models"
 	"fmt"
+	"github.com/ottmartens/mentor-server/models"
 	"log"
 	"net/http"
 )
@@ -12,9 +12,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Sprint(models.GetDB());
+	models.GetDB()
 	http.HandleFunc("/", handler)
 	fmt.Println("Listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
-
