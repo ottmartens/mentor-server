@@ -7,7 +7,7 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "4000:80"
+      - "4000:8080"
     networks:
       - backend
   mentor-db:
