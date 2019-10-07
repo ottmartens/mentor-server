@@ -5,7 +5,7 @@ import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/ottmartens/mentor-server/models"
-	u "github.com/ottmartens/mentor-server/utils"
+	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
 	"os"
 	"strings"
@@ -21,6 +21,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 			if value == requestPath {
 				next.ServeHTTP(w, r)
+				return
 			}
 		}
 
@@ -28,17 +29,17 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		tokenHeader := r.Header.Get("Authorization")
 
 		if tokenHeader == "" {
-			response = u.Message(false, "Missing auth token")
+			response = utils.Message(false, "Missing auth token")
 			w.WriteHeader(http.StatusForbidden)
-			u.Respond(w, response)
+			utils.Respond(w, response)
 			return
 		}
 
 		splitted := strings.Split(tokenHeader, " ")
 		if len(splitted) != 2 {
-			response = u.Message(false, "Invalid/Malformed auth token")
+			response = utils.Message(false, "Invalid/Malformed auth token")
 			w.WriteHeader(http.StatusForbidden)
-			u.Respond(w, response)
+			utils.Respond(w, response)
 			return
 		}
 
@@ -46,24 +47,24 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		tk := &models.Token{}
 
 		token, err := jwt.ParseWithClaims(tokenString, tk, func(token *jwt.Token) (interface{}, error) {
-			return []byte(os.Getenv("TOKEN_PASSWORD")), nil
+			return []byte(os.Getenv("TOKEN_SECRET")), nil
 		})
 
 		if err != nil {
-			response = u.Message(false, "Malformed authentication token")
+			response = utils.Message(false, "Malformed authentication token")
 			w.WriteHeader(http.StatusForbidden)
-			u.Respond(w, response)
+			utils.Respond(w, response)
 			return
 		}
 
 		if !token.Valid {
-			response = u.Message(false, "Token is not valid.")
+			response = utils.Message(false, "Token is not valid.")
 			w.WriteHeader(http.StatusForbidden)
-			u.Respond(w, response)
+			utils.Respond(w, response)
 			return
 		}
 
-		fmt.Sprint("User % authenticated successfully", tk.Username)
+		fmt.Sprint("User % authenticated successfully", tk.UserId)
 		ctx := context.WithValue(r.Context(), "user", tk.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)

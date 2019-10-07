@@ -2,18 +2,24 @@ package main
 
 import (
 	"fmt"
-	"github.com/ottmartens/mentor-server/models"
-	"log"
+	"github.com/gorilla/mux"
+	"github.com/ottmartens/mentor-server/app"
+	"github.com/ottmartens/mentor-server/controllers"
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from %s!", r.URL.Path[1:])
-}
-
 func main() {
-	models.GetDB()
-	http.HandleFunc("/", handler)
+
+	router := mux.NewRouter()
+	router.Use(app.JwtAuthentication)
+
+	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
+	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
+
 	fmt.Println("Listening on port 8080")
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	err := http.ListenAndServe("localhost:8080", router)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }
