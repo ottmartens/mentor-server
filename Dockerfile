@@ -8,7 +8,7 @@ RUN go get -d -v ./...
 
 RUN go install -v ./...
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["mentor-server"]
 
