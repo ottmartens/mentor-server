@@ -19,7 +19,7 @@ func main() {
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 
 	fmt.Println("Listening on port 8080")
-	err := http.ListenAndServe("localhost:8080", router)
+	err := http.ListenAndServe("0.0.0.0:8080", router)
 
 	if err != nil {
 		fmt.Println(err)
