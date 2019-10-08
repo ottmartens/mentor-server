@@ -9,6 +9,7 @@ node {
     }
     
     stage('build Docker image') {
+        sh 'cp /srv/mentor-server/.env .'
         sh 'docker build -t mentor-server .'
     }
 
