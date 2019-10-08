@@ -14,7 +14,7 @@ import (
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		notAuth := []string{"/api/user/new", "/api/user/login"}
+		notAuth := []string{"/api/health", "/api/user/new", "/api/user/login"}
 		requestPath := r.URL.Path
 
 		for _, value := range notAuth {
@@ -64,7 +64,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		fmt.Sprint("User % authenticated successfully", tk.UserId)
+		_ = fmt.Sprint("User % authenticated successfully", tk.UserId)
 		ctx := context.WithValue(r.Context(), "user", tk.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
