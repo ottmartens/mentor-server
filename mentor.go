@@ -17,6 +17,7 @@ func main() {
 	router.HandleFunc("/api/health", utils.HealthCheck).Methods("GET")
 	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
+	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
 
 	fmt.Println("Listening on port 8080")
 	err := http.ListenAndServe("0.0.0.0:8080", router)

@@ -17,7 +17,7 @@ type Account struct {
 	gorm.Model
 	Email    string `json:"email"`
 	Password string `json:"password"`
-	Token    string `json:"token";sql:"-"`
+	Token    string `json:"token";gorm:"-"`
 }
 
 func generateTokenWithId(id uint) string {
@@ -66,7 +66,7 @@ func (account *Account) Create() map[string]interface{} {
 	GetDB().Create(account)
 
 	if account.ID <= 0 {
-		return utils.Message(false, "Failed to create account, connection error.")
+		return utils.Message(false, "Failed to create account, connection error")
 	}
 
 	account.Token = generateTokenWithId(account.ID)
@@ -104,14 +104,14 @@ func Login(email, password string) map[string]interface{} {
 	return resp
 }
 
-func GetUser(u uint) *Account {
-
-	acc := &Account{}
-	GetDB().Table("accounts").Where("id = ?", u).First(acc)
-	if acc.Email == "" {
-		return nil
-	}
-
-	acc.Password = ""
-	return acc
-}
+//func GetUser(u uint) *Account {
+//
+//	acc := &Account{}
+//	GetDB().Table("accounts").Where("id = ?", u).First(acc)
+//	if acc.Email == "" {
+//		return nil
+//	}
+//
+//	acc.Password = ""
+//	return acc
+//}
