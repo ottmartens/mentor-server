@@ -17,11 +17,13 @@ type Token struct {
 }
 type Account struct {
 	gorm.Model
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Token    string `json:"token";gorm:"-"`
-	Role     string `json:"role"`
-	GroupId  uint   `json:"groupId"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Token     string `json:"token";gorm:"-"`
+	Role      string `json:"role"`
+	GroupId   uint   `json:"groupId"`
 }
 
 func generateTokenWithId(id uint) string {
