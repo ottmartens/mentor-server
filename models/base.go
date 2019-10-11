@@ -13,7 +13,6 @@ var db *gorm.DB
 func init() {
 
 	e := godotenv.Load()
-
 	if e != nil {
 		fmt.Print(e)
 	}
@@ -26,14 +25,10 @@ func init() {
 
 	dbUri := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", dbHost, dbPort, username, dbName, password)
 
-	fmt.Println(dbUri)
-
 	conn, err := gorm.Open("postgres", dbUri)
-
 	if err != nil {
 		fmt.Println("Error connecting to database: ", err)
 	}
-	fmt.Println(conn)
 
 	db = conn
 	db.Debug().AutoMigrate(&Account{}, &Group{})

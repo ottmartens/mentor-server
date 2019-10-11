@@ -113,14 +113,19 @@ func Login(email, password string) map[string]interface{} {
 	return resp
 }
 
-//func GetUser(u uint) *Account {
-//
-//	acc := &Account{}
-//	GetDB().Table("accounts").Where("id = ?", u).First(acc)
-//	if acc.Email == "" {
-//		return nil
-//	}
-//
-//	acc.Password = ""
-//	return acc
-//}
+func GetUser(u uint) *Account {
+
+	acc := &Account{}
+	GetDB().Table("accounts").Where("id = ?", u).First(acc)
+	if acc.Email == "" {
+		return nil
+	}
+
+	acc.Password = ""
+	return acc
+}
+
+func (account *Account) SetGroupId(groupId uint) {
+	account.GroupId = groupId
+	GetDB().Save(&account)
+}
