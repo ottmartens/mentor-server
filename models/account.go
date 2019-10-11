@@ -1,9 +1,11 @@
 package models
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/ottmartens/mentor-server/utils"
+	"github.com/ottmartens/mentor-server/utils/enums"
 	"golang.org/x/crypto/bcrypt"
 	"os"
 	"strings"
@@ -18,6 +20,8 @@ type Account struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Token    string `json:"token";gorm:"-"`
+	Role     string `json:"role"`
+	GroupId  uint   `json:"groupId"`
 }
 
 func generateTokenWithId(id uint) string {
@@ -37,6 +41,11 @@ func (account *Account) Validate() (map[string]interface{}, bool) {
 
 	if len(account.Password) < 8 {
 		return utils.Message(false, "Password must be at least 8 characters"), false
+	}
+
+	if account.Role != enums.UserTypes.Mentee && account.Role != enums.UserTypes.Mentor {
+		return utils.Message(
+			false, fmt.Sprintf("Role must me either %s or %s", enums.UserTypes.Mentee, enums.UserTypes.Mentor)), false
 	}
 
 	temp := &Account{}
