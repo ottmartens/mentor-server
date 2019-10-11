@@ -16,6 +16,6 @@ If not, get it from here: 👉 https://golang.org/
 
 In the project directory, just do:
 ```console
-go run mentor.go
+go run main.go
 ```
 Then, head to http://localhost:8080/here to see a greeting message 

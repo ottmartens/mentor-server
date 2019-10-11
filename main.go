@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/ottmartens/mentor-server/app"
+	//"github.com/ottmartens/mentor-server/app"
 	"github.com/ottmartens/mentor-server/controllers"
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
@@ -12,7 +12,7 @@ import (
 func main() {
 
 	router := mux.NewRouter()
-	router.Use(app.JwtAuthentication)
+	//router.Use(app.JwtAuthentication)
 
 	router.HandleFunc("/api/health", utils.HealthCheck).Methods("GET")
 
