@@ -30,7 +30,7 @@ func main() {
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
 
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
