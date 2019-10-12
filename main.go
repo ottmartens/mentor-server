@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	//"github.com/ottmartens/mentor-server/app"
 	"github.com/ottmartens/mentor-server/controllers"
@@ -29,8 +30,12 @@ func main() {
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
 
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
 	fmt.Println("Listening on port 8080")
-	err := http.ListenAndServe("0.0.0.0:8080", router)
+	err := http.ListenAndServe("0.0.0.0:8080", handlers.CORS(headersOk, originsOk, methodsOk)(router))
 
 	if err != nil {
 		fmt.Println(err)
