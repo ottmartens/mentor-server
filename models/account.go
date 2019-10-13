@@ -24,6 +24,7 @@ type Account struct {
 	Token     string `json:"token";gorm:"-"`
 	Role      string `json:"role"`
 	GroupId   uint   `json:"groupId"`
+	ImageUrl  string `json:"imageUrl"`
 }
 
 func generateTokenWithId(id uint) string {

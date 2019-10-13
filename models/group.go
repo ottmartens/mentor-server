@@ -114,7 +114,7 @@ func (group *Group) GetMentors() GroupWithMentors {
 			FirstName: account.FirstName,
 			LastName:  account.LastName,
 			UserId:    account.ID,
-			ImageUrl:  "",
+			ImageUrl:  account.ImageUrl,
 		})
 	}
 
