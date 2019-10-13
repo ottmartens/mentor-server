@@ -116,10 +116,19 @@ func Login(email, password string) map[string]interface{} {
 	return resp
 }
 
-func GetUser(u uint) *Account {
+func (account *Account) getPublicInfo() AccountPublic {
+	return AccountPublic{
+		FirstName: account.FirstName,
+		LastName:  account.LastName,
+		UserId:    account.ID,
+		ImageUrl:  account.ImageUrl,
+	}
+}
+
+func GetUser(userId uint) *Account {
 
 	acc := &Account{}
-	GetDB().Table("accounts").Where("id = ?", u).First(acc)
+	GetDB().Table("accounts").Where("id = ?", userId).First(acc)
 	if acc.Email == "" {
 		return nil
 	}

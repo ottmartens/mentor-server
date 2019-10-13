@@ -15,11 +15,20 @@ type Group struct {
 }
 
 type GroupWithMentors struct {
-	gorm.Model
-	Title       string   `json:"title"`
-	Tagline     string   `json:"tagline"`
-	Description string   `json:"description"`
-	Mentors     []Mentor `json:"mentors"`
+	Id          uint            `json:"id"`
+	Title       string          `json:"title"`
+	Tagline     string          `json:"tagline"`
+	Description string          `json:"description"`
+	Mentors     []AccountPublic `json:"mentors"`
+}
+
+type GroupDetails struct {
+	Title       string          `json:"title"`
+	Tagline     string          `json:"tagline"`
+	Description string          `json:"description"`
+	Mentors     []AccountPublic `json:"mentors"`
+	Mentees     []AccountPublic `json:"mentees"`
+	Requests    []AccountPublic `json:"requests"`
 }
 
 func GetGroup(id uint) *Group {
@@ -32,6 +41,18 @@ func GetGroup(id uint) *Group {
 	}
 
 	return group
+}
+
+func GetGroupDetails(groupId uint) *GroupDetails {
+
+	group := GetGroup(groupId)
+	if group == nil {
+		return nil
+	}
+
+	groupDetails := group.GetDetails()
+
+	return &groupDetails
 }
 
 func GetGroups() []GroupWithMentors {
@@ -105,8 +126,8 @@ func (group *Group) Validate(mentors []uint) (map[string]interface{}, bool) {
 
 func (group *Group) GetMentors() GroupWithMentors {
 
-	mentorAccounts := make([]*Account, 0)
-	err := GetDB().Table("accounts").Where("group_id = ?", group.ID).Find(&mentorAccounts).Error
+	mentors := make([]*Account, 0)
+	err := GetDB().Table("accounts").Where("group_id = ?", group.ID).Where("role = ?", enums.UserTypes.Mentor).Find(&mentors).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -116,17 +137,55 @@ func (group *Group) GetMentors() GroupWithMentors {
 		Title:       group.Title,
 		Tagline:     group.Tagline,
 		Description: group.Description,
+		Id:          group.ID,
 		Mentors:     nil,
 	}
 
-	for _, account := range mentorAccounts {
-		response.Mentors = append(response.Mentors, Mentor{
-			FirstName: account.FirstName,
-			LastName:  account.LastName,
-			UserId:    account.ID,
-			ImageUrl:  account.ImageUrl,
-		})
+	for _, mentor := range mentors {
+		response.Mentors = append(response.Mentors, mentor.getPublicInfo())
 	}
 
 	return response
+}
+
+func (group *Group) GetDetails() GroupDetails {
+
+	groupDetails := GroupDetails{
+		Title:       group.Title,
+		Tagline:     group.Tagline,
+		Description: group.Description,
+		Mentors:     nil,
+		Mentees:     nil,
+		Requests:    nil,
+	}
+
+	mentors := make([]*Account, 0)
+	err := GetDB().Table("accounts").Where("group_id = ?", group.ID).Where("role = ?", enums.UserTypes.Mentor).Find(&mentors).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, mentor := range mentors {
+		groupDetails.Mentors = append(groupDetails.Mentors, mentor.getPublicInfo())
+	}
+
+	mentees := make([]*Account, 0)
+	err = GetDB().Table("accounts").Where("group_id = ?", group.ID).Where("role = ?", enums.UserTypes.Mentee).Find(&mentees).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, mentee := range mentees {
+		groupDetails.Mentees = append(groupDetails.Mentees, mentee.getPublicInfo())
+	}
+
+	joiningRequests := make([]*Request, 0)
+	err = GetDB().Table("requests").Where("target = ?", group.ID).Where("type = ?", enums.RequestTypes.JoinGroup).Find(&joiningRequests).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, request := range joiningRequests {
+		user := GetUser(request.Initiator)
+		groupDetails.Requests = append(groupDetails.Requests, user.getPublicInfo())
+	}
+
+	return groupDetails
 }

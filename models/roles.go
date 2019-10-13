@@ -1,6 +1,6 @@
 package models
 
-type Mentor struct {
+type AccountPublic struct {
 	FirstName string
 	LastName  string
 	UserId    uint

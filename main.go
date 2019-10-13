@@ -21,6 +21,8 @@ func main() {
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
+	router.HandleFunc("/api/groups/{id}", controllers.GetGroupDetails).Methods("GET")
+
 	router.HandleFunc("/api/groups/request-creation", nil).Methods("POST")
 	router.HandleFunc("/api/groups/accept-creation", nil).Methods("POST")
 

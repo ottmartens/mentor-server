@@ -3,18 +3,33 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
 	"github.com/ottmartens/mentor-server/utils/enums"
 	"net/http"
+	"strconv"
 )
 
 var GetGroups = func(w http.ResponseWriter, r *http.Request) {
-
 	groups := models.GetGroups()
 	resp := utils.Message(true, "success")
 
 	resp["data"] = groups
+
+	utils.Respond(w, resp)
+}
+
+var GetGroupDetails = func(w http.ResponseWriter, r *http.Request) {
+	groupId, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		utils.Respond(w, utils.Message(true, "Invalid group id"))
+		return
+	}
+
+	data := models.GetGroupDetails(uint(groupId))
+	resp := utils.Message(true, "Success")
+	resp["data"] = data
 
 	utils.Respond(w, resp)
 }
