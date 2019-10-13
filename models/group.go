@@ -14,7 +14,15 @@ type Group struct {
 	Description string `json:"description"`
 }
 
-func GetGroups() []*Group {
+type GroupWithMentors struct {
+	gorm.Model
+	Title       string   `json:"title"`
+	Tagline     string   `json:"tagline"`
+	Description string   `json:"description"`
+	Mentors     []Mentor `json:"mentors"`
+}
+
+func GetGroups() []GroupWithMentors {
 
 	groups := make([]*Group, 0)
 	err := GetDB().Table("groups").Find(&groups).Error
@@ -24,11 +32,13 @@ func GetGroups() []*Group {
 		return nil
 	}
 
+	var resp []GroupWithMentors
+
 	for _, group := range groups {
-		fmt.Println(group.Title)
+		resp = append(resp, group.GetMentors())
 	}
 
-	return groups
+	return resp
 }
 
 func (group *Group) Create(mentors []uint) map[string]interface{} {
@@ -79,4 +89,34 @@ func (group *Group) Validate(mentors []uint) (map[string]interface{}, bool) {
 	}
 
 	return utils.Message(true, "Validation passed"), true
+}
+
+func (group *Group) GetMentors() GroupWithMentors {
+
+	mentorAccounts := make([]*Account, 0)
+	err := GetDB().Table("accounts").Where("group_id = ?", group.ID).Find(&mentorAccounts).Error
+
+	fmt.Println("len", len(mentorAccounts))
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	response := GroupWithMentors{
+		Title:       group.Title,
+		Tagline:     group.Tagline,
+		Description: group.Description,
+		Mentors:     nil,
+	}
+
+	for _, account := range mentorAccounts {
+		response.Mentors = append(response.Mentors, Mentor{
+			FirstName: account.FirstName,
+			LastName:  account.LastName,
+			UserId:    account.ID,
+			ImageUrl:  "",
+		})
+	}
+
+	return response
 }

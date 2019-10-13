@@ -13,8 +13,6 @@ var GetGroups = func(w http.ResponseWriter, r *http.Request) {
 	groups := models.GetGroups()
 	resp := utils.Message(true, "success")
 
-	// TODO: GROUP WITH MEMBERS
-
 	resp["data"] = groups
 
 	utils.Respond(w, resp)
