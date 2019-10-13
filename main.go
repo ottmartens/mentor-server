@@ -24,7 +24,7 @@ func main() {
 	router.HandleFunc("/api/groups/request-creation", nil).Methods("POST")
 	router.HandleFunc("/api/groups/accept-creation", nil).Methods("POST")
 
-	router.HandleFunc("/api/groups/join", nil).Methods("POST")
+	router.HandleFunc("/api/groups/join", controllers.RequestGroupJoining).Methods("POST")
 	router.HandleFunc("/api/groups/accept-joining", nil).Methods("POST")
 
 	// Temporary dev routes

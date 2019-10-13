@@ -22,6 +22,18 @@ type GroupWithMentors struct {
 	Mentors     []Mentor `json:"mentors"`
 }
 
+func GetGroup(id uint) *Group {
+
+	group := &Group{}
+	GetDB().Table("groups").Where("id = ?", id).First(group)
+	if group.ID == 0 {
+		fmt.Printf("No group with id %d", id)
+		return nil
+	}
+
+	return group
+}
+
 func GetGroups() []GroupWithMentors {
 
 	groups := make([]*Group, 0)
@@ -95,8 +107,6 @@ func (group *Group) GetMentors() GroupWithMentors {
 
 	mentorAccounts := make([]*Account, 0)
 	err := GetDB().Table("accounts").Where("group_id = ?", group.ID).Find(&mentorAccounts).Error
-
-	fmt.Println("len", len(mentorAccounts))
 
 	if err != nil {
 		fmt.Println(err)
