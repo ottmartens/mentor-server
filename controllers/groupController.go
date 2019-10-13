@@ -62,13 +62,34 @@ var CreateGroupDirectly = func(w http.ResponseWriter, r *http.Request) {
 	utils.Respond(w, resp)
 }
 
+var HandleJoining = func(w http.ResponseWriter, r *http.Request) {
+
+	type payload struct {
+		GroupId uint `json:"groupId"`
+		UserId  uint `json:"userId"`
+		Accept  bool `json:"accept"`
+	}
+	request := &payload{
+		Accept: true, // Accept request if no value present
+	}
+
+	err := json.NewDecoder(r.Body).Decode(request)
+	if err != nil {
+		utils.Respond(w, utils.Message(false, "Invalid request"))
+		return
+	}
+
+	resp := models.HandleJoiningRequest(request.GroupId, request.UserId, request.Accept)
+
+	utils.Respond(w, resp)
+}
+
 var RequestGroupJoining = func(w http.ResponseWriter, r *http.Request) {
 
 	type payload struct {
 		GroupId uint `json:"groupId"`
 		UserId  uint `json:"userId"`
 	}
-
 	request := &payload{}
 
 	err := json.NewDecoder(r.Body).Decode(request)

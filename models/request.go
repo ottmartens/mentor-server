@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/ottmartens/mentor-server/utils"
+	"github.com/ottmartens/mentor-server/utils/enums"
 )
 
 type Request struct {
@@ -36,4 +37,28 @@ func RequestExists(request Request) bool {
 	prev := &Request{}
 	GetDB().Where(request).First(prev)
 	return prev.ID != 0
+}
+
+func HandleJoiningRequest(groupId uint, userId uint, accept bool) map[string]interface{} {
+
+	request := Request{
+		Type:      enums.RequestTypes.JoinGroup,
+		Initiator: userId,
+		Target:    groupId,
+	}
+
+	GetDB().Where(&request).First(&request)
+
+	if request.ID == 0 {
+		return utils.Message(false, "Request not found")
+	}
+
+	if accept {
+		user := GetUser(userId)
+		user.SetGroupId(groupId)
+	}
+
+	GetDB().Delete(request)
+
+	return utils.Message(true, "Request approved!")
 }
