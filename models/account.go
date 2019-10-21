@@ -23,7 +23,7 @@ type Account struct {
 	LastName  string `json:"lastName"`
 	Token     string `json:"token";gorm:"-"`
 	Role      string `json:"role"`
-	GroupId   uint   `json:"groupId"`
+	GroupId   *uint  `json:"groupId"`
 	ImageUrl  string `json:"imageUrl"`
 }
 
@@ -125,7 +125,7 @@ func (account *Account) getPublicInfo() AccountPublic {
 	}
 }
 
-func GetUser(userId uint) *Account {
+func GetUser(userId uint, hidePassword bool) *Account {
 
 	acc := &Account{}
 	GetDB().Table("accounts").Where("id = ?", userId).First(acc)
@@ -133,11 +133,14 @@ func GetUser(userId uint) *Account {
 		return nil
 	}
 
-	acc.Password = ""
+	if hidePassword {
+		acc.Password = ""
+	}
+
 	return acc
 }
 
 func (account *Account) SetGroupId(groupId uint) {
-	account.GroupId = groupId
+	account.GroupId = &groupId
 	GetDB().Save(&account)
 }

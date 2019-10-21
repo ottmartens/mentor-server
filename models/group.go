@@ -87,7 +87,7 @@ func (group *Group) Create(mentors []uint) map[string]interface{} {
 	}
 
 	for _, userId := range mentors {
-		user := GetUser(userId)
+		user := GetUser(userId, false)
 		user.SetGroupId(group.ID)
 	}
 
@@ -116,7 +116,7 @@ func (group *Group) Validate(mentors []uint) (map[string]interface{}, bool) {
 			return utils.Message(false, fmt.Sprintf("User %s is not a mentor", user.Email)), false
 		}
 
-		if user.GroupId > 0 {
+		if *user.GroupId > 0 {
 			return utils.Message(false, fmt.Sprintf("User %s already belongs to a group", user.Email)), false
 		}
 	}
@@ -183,7 +183,7 @@ func (group *Group) GetDetails() GroupDetails {
 		fmt.Println(err)
 	}
 	for _, request := range joiningRequests {
-		user := GetUser(request.Initiator)
+		user := GetUser(request.Initiator, true)
 		groupDetails.Requests = append(groupDetails.Requests, user.getPublicInfo())
 	}
 

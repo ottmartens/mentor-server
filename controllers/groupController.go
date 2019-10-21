@@ -104,7 +104,7 @@ var RequestGroupJoining = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := models.GetUser(request.UserId)
+	user := models.GetUser(request.UserId, true)
 	if user == nil {
 		utils.Respond(w, utils.Message(false, "Invalid user id"))
 		return
@@ -113,7 +113,7 @@ var RequestGroupJoining = func(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, utils.Message(false, "User is not a mentee"))
 		return
 	}
-	if user.GroupId != 0 {
+	if *user.GroupId != 0 {
 		utils.Respond(w, utils.Message(false, "User already belongs to a group"))
 		return
 	}

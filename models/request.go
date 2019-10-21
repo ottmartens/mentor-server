@@ -54,7 +54,7 @@ func HandleJoiningRequest(groupId uint, userId uint, accept bool) map[string]int
 	}
 
 	if accept {
-		user := GetUser(userId)
+		user := GetUser(userId, false)
 		user.SetGroupId(groupId)
 	}
 
