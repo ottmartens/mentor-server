@@ -138,7 +138,7 @@ func (group *Group) GetMentors() GroupWithMentors {
 		Tagline:     group.Tagline,
 		Description: group.Description,
 		Id:          group.ID,
-		Mentors:     nil,
+		Mentors:     []AccountPublic{},
 	}
 
 	for _, mentor := range mentors {
@@ -154,9 +154,9 @@ func (group *Group) GetDetails() GroupDetails {
 		Title:       group.Title,
 		Tagline:     group.Tagline,
 		Description: group.Description,
-		Mentors:     nil,
-		Mentees:     nil,
-		Requests:    nil,
+		Mentors:     []AccountPublic{},
+		Mentees:     []AccountPublic{},
+		Requests:    []AccountPublic{},
 	}
 
 	mentors := make([]*Account, 0)
