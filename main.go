@@ -5,8 +5,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/ottmartens/mentor-server/app"
-
-	//"github.com/ottmartens/mentor-server/app"
 	"github.com/ottmartens/mentor-server/controllers"
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
@@ -28,8 +26,8 @@ func main() {
 	router.HandleFunc("/api/groups/{id}/edit", nil).Methods("POST")
 
 	router.HandleFunc("/api/available-mentors", controllers.GetAvailableMentors).Methods("GET")
-	router.HandleFunc("/api/groups/request-creation", controllers.CreateFormingRequest).Methods("POST")
-	router.HandleFunc("/api/groups/accept-creation", nil).Methods("POST")
+	router.HandleFunc("/api/groups/request-creation", controllers.RequestGroupForming).Methods("POST")
+	router.HandleFunc("/api/groups/accept-creation", controllers.HandleForming).Methods("POST")
 
 	router.HandleFunc("/api/groups/join", controllers.RequestGroupJoining).Methods("POST")
 	router.HandleFunc("/api/groups/accept-joining", controllers.HandleJoining).Methods("POST")

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/ottmartens/mentor-server/utils"
 	"github.com/ottmartens/mentor-server/utils/enums"
@@ -53,12 +54,83 @@ func HandleJoiningRequest(groupId uint, userId uint, accept bool) map[string]int
 		return utils.Message(false, "Request not found")
 	}
 
+	GetDB().Delete(request)
+
 	if accept {
 		user := GetUser(userId, false)
 		user.SetGroupId(groupId)
+		return utils.Message(true, "Request approved!")
 	}
 
-	GetDB().Delete(request)
+	return utils.Message(true, "Request deleted!")
+}
 
-	return utils.Message(true, "Request approved!")
+func HandleFormingRequest(userId uint, requesterId uint, accept bool) map[string]interface{} {
+
+	request := Request{
+		Type:      enums.RequestTypes.CreateGroup,
+		Initiator: requesterId,
+		Target:    userId,
+	}
+
+	GetDB().Where(&request).First(&request)
+
+	if request.ID == 0 {
+		return utils.Message(false, "Request not found")
+	}
+
+	if accept {
+		mentorOne := GetUser(userId, false)
+		mentorTwo := GetUser(requesterId, false)
+
+		group := &Group{}
+
+		if mentorOne.FirstName != "" && mentorTwo.LastName != "" {
+			group.Title = fmt.Sprintf("The humble bundle of %s and %s", mentorOne.LastName, mentorTwo.LastName)
+			group.Description = fmt.Sprintf("%s will get you drunk and %s is your key to passing your exams", mentorOne.LastName, mentorTwo.LastName)
+		}
+
+		err := GetDB().Create(group).Error
+		if err != nil {
+			return utils.Message(false, "Error creating the group")
+		}
+
+		mentorOne.SetGroupId(group.ID)
+		mentorTwo.SetGroupId(group.ID)
+
+		mentorOne.deleteAllFormingRequests()
+		mentorTwo.deleteAllFormingRequests()
+
+		GetDB().Delete(request)
+
+		resp := utils.Message(true, "Request approved!")
+		resp["data"] = group.GetDetails()
+		return resp
+	} else {
+		GetDB().Delete(request)
+		return utils.Message(true, "Request deleted!")
+	}
+}
+
+func (account *Account) deleteAllFormingRequests() {
+
+	requests := make([]*Request, 0)
+
+	err := GetDB().Table("requests").Where(&Request{
+		Type:      enums.RequestTypes.CreateGroup,
+		Initiator: account.ID,
+	}).Or(&Request{
+		Type:   enums.RequestTypes.CreateGroup,
+		Target: account.ID,
+	}).Find(&requests).Error
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		fmt.Printf("Error deleting requests for user %d \n", account.ID)
+		fmt.Println(err)
+	}
+
+	for _, request := range requests {
+		GetDB().Delete(request)
+	}
+	return
 }
