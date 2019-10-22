@@ -28,7 +28,7 @@ func main() {
 	router.HandleFunc("/api/groups/{id}/edit", nil).Methods("POST")
 
 	router.HandleFunc("/api/available-mentors", controllers.GetAvailableMentors).Methods("GET")
-	router.HandleFunc("/api/groups/request-creation", nil).Methods("POST")
+	router.HandleFunc("/api/groups/request-creation", controllers.CreateFormingRequest).Methods("POST")
 	router.HandleFunc("/api/groups/accept-creation", nil).Methods("POST")
 
 	router.HandleFunc("/api/groups/join", controllers.RequestGroupJoining).Methods("POST")
