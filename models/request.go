@@ -86,8 +86,8 @@ func HandleFormingRequest(userId uint, requesterId uint, accept bool) map[string
 		group := &Group{}
 
 		if mentorOne.FirstName != "" && mentorTwo.LastName != "" {
-			group.Title = fmt.Sprintf("The humble bundle of %s and %s", mentorOne.LastName, mentorTwo.LastName)
-			group.Description = fmt.Sprintf("%s will get you drunk and %s is your key to passing your exams", mentorOne.LastName, mentorTwo.LastName)
+			group.Tagline = fmt.Sprintf("The humble bundle of %s and %s", mentorOne.FirstName, mentorTwo.FirstName)
+			group.Description = fmt.Sprintf("%s will get you drunk and %s is your key to passing your exams", mentorOne.FirstName, mentorTwo.FirstName)
 		}
 
 		err := GetDB().Create(group).Error
