@@ -26,6 +26,9 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 	if len(profile.LastName) > 0 {
 		user.LastName = profile.LastName
 	}
+	if len(profile.Bio) > 0 {
+		user.Bio = profile.Bio
+	}
 
 	models.GetDB().Save(user)
 

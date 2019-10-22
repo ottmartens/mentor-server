@@ -11,15 +11,16 @@ type AccountPublic struct {
 	LastName  string `json:"lastName"`
 	UserId    uint   `json:"userId"`
 	ImageUrl  string `json:"imageUrl"`
+	Bio       string `json:"bio"`
 }
 
 type AvailableMentor struct {
-	FirstName        string
-	LastName         string
-	UserId           uint
-	ImageUrl         string
-	HasRequestedYou  bool
-	YouHaveRequested bool
+	FirstName        string `json:"firstName"`
+	LastName         string `json:"lastName"`
+	UserId           uint   `json:"userId"`
+	ImageUrl         string `json:"imageUrl"`
+	HasRequestedYou  bool   `json:"hasRequestedYou"`
+	YouHaveRequested bool   `json:"youHaveRequested"`
 }
 
 func GetFreeMentors(userId uint) []AvailableMentor {
