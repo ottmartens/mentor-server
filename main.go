@@ -23,7 +23,7 @@ func main() {
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
 	router.HandleFunc("/api/groups/{id}", controllers.GetGroupDetails).Methods("GET")
-	router.HandleFunc("/api/groups/{id}/edit", nil).Methods("POST")
+	router.HandleFunc("/api/groups/{id}/edit", controllers.EditGroupProfile).Methods("POST")
 
 	router.HandleFunc("/api/available-mentors", controllers.GetAvailableMentors).Methods("GET")
 	router.HandleFunc("/api/groups/request-creation", controllers.RequestGroupForming).Methods("POST")
