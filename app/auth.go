@@ -8,7 +8,6 @@ import (
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
 	"os"
-	"strings"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -35,18 +34,9 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		splitted := strings.Split(tokenHeader, " ")
-		if len(splitted) != 2 {
-			response = utils.Message(false, "Invalid/Malformed auth token")
-			w.WriteHeader(http.StatusForbidden)
-			utils.Respond(w, response)
-			return
-		}
-
-		tokenString := splitted[1]
 		tk := &models.Token{}
 
-		token, err := jwt.ParseWithClaims(tokenString, tk, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenHeader, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("TOKEN_SECRET")), nil
 		})
 
