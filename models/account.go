@@ -117,12 +117,13 @@ func Login(email, password string) map[string]interface{} {
 	return resp
 }
 
-func (account *Account) getPublicInfo() AccountPublic {
+func (account *Account) GetPublicInfo() AccountPublic {
 	return AccountPublic{
 		FirstName: account.FirstName,
 		LastName:  account.LastName,
 		UserId:    account.ID,
 		ImageUrl:  account.ImageUrl,
+		Bio:       account.Bio,
 	}
 }
 

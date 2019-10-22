@@ -142,7 +142,7 @@ func (group *Group) GetMentors() GroupWithMentors {
 	}
 
 	for _, mentor := range mentors {
-		response.Mentors = append(response.Mentors, mentor.getPublicInfo())
+		response.Mentors = append(response.Mentors, mentor.GetPublicInfo())
 	}
 
 	return response
@@ -165,7 +165,7 @@ func (group *Group) GetDetails() GroupDetails {
 		fmt.Println(err)
 	}
 	for _, mentor := range mentors {
-		groupDetails.Mentors = append(groupDetails.Mentors, mentor.getPublicInfo())
+		groupDetails.Mentors = append(groupDetails.Mentors, mentor.GetPublicInfo())
 	}
 
 	mentees := make([]*Account, 0)
@@ -174,7 +174,7 @@ func (group *Group) GetDetails() GroupDetails {
 		fmt.Println(err)
 	}
 	for _, mentee := range mentees {
-		groupDetails.Mentees = append(groupDetails.Mentees, mentee.getPublicInfo())
+		groupDetails.Mentees = append(groupDetails.Mentees, mentee.GetPublicInfo())
 	}
 
 	joiningRequests := make([]*Request, 0)
@@ -184,7 +184,7 @@ func (group *Group) GetDetails() GroupDetails {
 	}
 	for _, request := range joiningRequests {
 		user := GetUser(request.Initiator, true)
-		groupDetails.Requests = append(groupDetails.Requests, user.getPublicInfo())
+		groupDetails.Requests = append(groupDetails.Requests, user.GetPublicInfo())
 	}
 
 	return groupDetails

@@ -34,9 +34,8 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	models.GetDB().Save(user)
 
-	user.Password = ""
 	resp := utils.Message(true, "Profile successfully edited")
-	resp["data"] = user
+	resp["data"] = user.GetPublicInfo()
 
 	utils.Respond(w, resp)
 }
