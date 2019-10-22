@@ -7,10 +7,10 @@ import (
 )
 
 type AccountPublic struct {
-	FirstName string
-	LastName  string
-	UserId    uint
-	ImageUrl  string
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	UserId    uint   `json:"userId"`
+	ImageUrl  string `json:"imageUrl"`
 }
 
 type AvailableMentor struct {
