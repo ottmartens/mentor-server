@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 func GetAvailableMentors(w http.ResponseWriter, r *http.Request) {
 
 	userId := r.Context().Value("user").(uint)
+
+	fmt.Println(userId)
 
 	mentors := models.GetFreeMentors(userId)
 

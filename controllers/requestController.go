@@ -38,7 +38,7 @@ func RequestGroupJoining(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, utils.Message(false, "User is not a mentee"))
 		return
 	}
-	if *user.GroupId != 0 {
+	if user.GroupId != nil {
 		utils.Respond(w, utils.Message(false, "User already belongs to a group"))
 		return
 	}
