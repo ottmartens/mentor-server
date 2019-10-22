@@ -48,10 +48,10 @@ func RequestGroupJoining(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleJoining(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
 
 	type payload struct {
 		GroupId uint `json:"groupId"`
-		UserId  uint `json:"userId"`
 		Accept  bool `json:"accept"`
 	}
 	request := &payload{
@@ -64,7 +64,7 @@ func HandleJoining(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := models.HandleJoiningRequest(request.GroupId, request.UserId, request.Accept)
+	resp := models.HandleJoiningRequest(request.GroupId, userId, request.Accept)
 
 	utils.Respond(w, resp)
 }
