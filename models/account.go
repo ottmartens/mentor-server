@@ -144,5 +144,5 @@ func GetUser(userId uint, hidePassword bool) *Account {
 
 func (account *Account) SetGroupId(groupId uint) {
 	account.GroupId = &groupId
-	GetDB().Save(&account)
+	GetDB().Save(account)
 }

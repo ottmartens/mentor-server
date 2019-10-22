@@ -101,8 +101,6 @@ func HandleFormingRequest(userId uint, requesterId uint, accept bool) map[string
 		mentorOne.deleteAllFormingRequests()
 		mentorTwo.deleteAllFormingRequests()
 
-		GetDB().Delete(request)
-
 		resp := utils.Message(true, "Request approved!")
 		resp["data"] = group
 		return resp
