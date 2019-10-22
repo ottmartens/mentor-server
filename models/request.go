@@ -104,7 +104,7 @@ func HandleFormingRequest(userId uint, requesterId uint, accept bool) map[string
 		GetDB().Delete(request)
 
 		resp := utils.Message(true, "Request approved!")
-		resp["data"] = group.GetDetails()
+		resp["data"] = group
 		return resp
 	} else {
 		GetDB().Delete(request)
