@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/ottmartens/mentor-server/app"
+
 	//"github.com/ottmartens/mentor-server/app"
 	"github.com/ottmartens/mentor-server/controllers"
 	"github.com/ottmartens/mentor-server/utils"
@@ -13,16 +15,19 @@ import (
 func main() {
 
 	router := mux.NewRouter()
-	//router.Use(app.JwtAuthentication)
+	router.Use(app.JwtAuthentication)
 
 	router.HandleFunc("/api/health", utils.HealthCheck).Methods("GET")
 
 	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
+	router.HandleFunc("/api/user/edit", nil).Methods("POST")
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
 	router.HandleFunc("/api/groups/{id}", controllers.GetGroupDetails).Methods("GET")
+	router.HandleFunc("/api/groups/{id}/edit", nil).Methods("POST")
 
+	router.HandleFunc("/api/available-mentors", controllers.GetAvailableMentors).Methods("GET")
 	router.HandleFunc("/api/groups/request-creation", nil).Methods("POST")
 	router.HandleFunc("/api/groups/accept-creation", nil).Methods("POST")
 
