@@ -12,9 +12,17 @@ import (
 func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("user").(uint)
 	//
-	profile := models.AccountPublic{}
 
-	err := json.NewDecoder(r.Body).Decode(&profile)
+	type profile struct {
+		FirstName string `json:"firstName"`
+		LastName  string `json:"lastName"`
+		ImageUrl  string `json:"imageUrl"`
+		Bio       string `json:"bio"`
+	}
+
+	request := profile{}
+
+	err := json.NewDecoder(r.Body).Decode(&request)
 
 	if err != nil {
 		utils.Respond(w, utils.Message(false, "Invalid request"))
@@ -22,20 +30,21 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	user := models.GetUser(userId, false)
 
-	if len(profile.FirstName) > 0 {
-		user.FirstName = profile.FirstName
+	if len(request.FirstName) > 0 {
+		user.FirstName = request.FirstName
 	}
-	if len(profile.LastName) > 0 {
-		user.LastName = profile.LastName
+	if len(request.LastName) > 0 {
+		user.LastName = request.LastName
 	}
-	if len(profile.Bio) > 0 {
-		user.Bio = profile.Bio
+	if len(request.Bio) > 0 {
+		user.Bio = request.Bio
 	}
 
 	models.GetDB().Save(user)
 
 	resp := utils.Message(true, "Profile successfully edited")
-	resp["data"] = user.GetPublicInfo()
+
+	resp["data"] = request
 
 	utils.Respond(w, resp)
 }
