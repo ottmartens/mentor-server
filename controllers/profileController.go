@@ -9,6 +9,17 @@ import (
 	"strconv"
 )
 
+func GetUserSelf(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
+
+	data := models.GetUser(userId, true)
+
+	resp := utils.Message(true, "Success")
+	resp["data"] = data
+
+	utils.Respond(w, resp)
+}
+
 func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("user").(uint)
 	//

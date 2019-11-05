@@ -20,6 +20,7 @@ func main() {
 	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 	router.HandleFunc("/api/user/edit", controllers.EditUserProfile).Methods("POST")
+	router.HandleFunc("/api/user/self", controllers.GetUserSelf).Methods("GET")
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
 	router.HandleFunc("/api/groups/my-group", controllers.GetUsersGroup).Methods("GET")
