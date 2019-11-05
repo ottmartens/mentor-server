@@ -22,6 +22,7 @@ func main() {
 	router.HandleFunc("/api/user/edit", controllers.EditUserProfile).Methods("POST")
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
+	router.HandleFunc("/api/groups/my-group", controllers.GetUsersGroup).Methods("GET")
 	router.HandleFunc("/api/groups/{id}", controllers.GetGroupDetails).Methods("GET")
 	router.HandleFunc("/api/groups/{id}/edit", controllers.EditGroupProfile).Methods("POST")
 

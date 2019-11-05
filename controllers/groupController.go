@@ -33,6 +33,26 @@ var GetGroupDetails = func(w http.ResponseWriter, r *http.Request) {
 	utils.Respond(w, resp)
 }
 
+var GetUsersGroup = func(w http.ResponseWriter, r *http.Request) {
+
+	userId := r.Context().Value("user").(uint)
+
+	user := models.GetUser(userId, false)
+
+	if user.GroupId == nil {
+		utils.Respond(w, utils.Message(false, "You do not belong to a group"))
+		return
+	}
+
+	data := models.GetGroupDetails(*user.GroupId)
+
+	resp := utils.Message(true, "Success")
+
+	resp["data"] = data
+
+	utils.Respond(w, resp)
+}
+
 var CreateGroupDirectly = func(w http.ResponseWriter, r *http.Request) {
 
 	type payload struct {
