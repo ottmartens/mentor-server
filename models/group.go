@@ -92,7 +92,6 @@ func (group *Group) Create(mentors []uint) map[string]interface{} {
 	}
 
 	response := utils.Message(true, "Group has been created")
-	response["data"] = group
 	return response
 }
 

@@ -101,12 +101,7 @@ func HandleFormingRequest(userId uint, requesterId uint, accept bool) map[string
 		mentorOne.deleteAllFormingRequests()
 		mentorTwo.deleteAllFormingRequests()
 
-		type data struct {
-			GroupId uint `json:"groupId"`
-		}
-
 		resp := utils.Message(true, "Request approved!")
-		resp["data"] = data{GroupId: group.ID}
 
 		return resp
 	} else {

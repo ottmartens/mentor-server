@@ -86,7 +86,7 @@ func (account *Account) Create() map[string]interface{} {
 	account.Password = ""
 
 	response := utils.Message(true, "Account has been created")
-	response["data"] = account
+	response["data"] = account.Token
 	return response
 }
 
@@ -113,7 +113,7 @@ func Login(email, password string) map[string]interface{} {
 	account.Password = ""
 
 	resp := utils.Message(true, "Logged in")
-	resp["data"] = account
+	resp["data"] = account.Token
 	return resp
 }
 

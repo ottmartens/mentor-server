@@ -55,8 +55,6 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	resp := utils.Message(true, "Profile successfully edited")
 
-	resp["data"] = request
-
 	utils.Respond(w, resp)
 }
 
