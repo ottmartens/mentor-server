@@ -28,6 +28,13 @@ type Account struct {
 	Bio       string `json:"bio"`
 }
 
+type AuthResponse struct {
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	ImageUrl  string `json:"imageUrl"`
+	Token     string `json:"token"`
+}
+
 func generateTokenWithId(id uint) string {
 
 	tk := &Token{UserId: id}
@@ -86,7 +93,12 @@ func (account *Account) Create() map[string]interface{} {
 	account.Password = ""
 
 	response := utils.Message(true, "Account has been created")
-	response["data"] = account.Token
+	response["data"] = AuthResponse{
+		FirstName: account.FirstName,
+		LastName:  account.LastName,
+		ImageUrl:  account.ImageUrl,
+		Token:     account.Token,
+	}
 	return response
 }
 
@@ -113,7 +125,13 @@ func Login(email, password string) map[string]interface{} {
 	account.Password = ""
 
 	resp := utils.Message(true, "Logged in")
-	resp["data"] = account.Token
+
+	resp["data"] = AuthResponse{
+		FirstName: account.FirstName,
+		LastName:  account.LastName,
+		ImageUrl:  account.ImageUrl,
+		Token:     account.Token,
+	}
 	return resp
 }
 
