@@ -21,6 +21,7 @@ func main() {
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 	router.HandleFunc("/api/user/edit", controllers.EditUserProfile).Methods("POST")
 	router.HandleFunc("/api/user/self", controllers.GetUserSelf).Methods("GET")
+	router.HandleFunc("/api/user/image", controllers.GetUserImage).Methods("POST")
 
 	router.HandleFunc("/api/groups", controllers.GetGroups).Methods("GET")
 	router.HandleFunc("/api/groups/my-group", controllers.GetUsersGroup).Methods("GET")
@@ -33,6 +34,8 @@ func main() {
 
 	router.HandleFunc("/api/groups/join", controllers.RequestGroupJoining).Methods("POST")
 	router.HandleFunc("/api/groups/accept-joining", controllers.HandleJoining).Methods("POST")
+
+	router.PathPrefix("/api/images/").Handler(http.StripPrefix("/api/images/", http.FileServer(http.Dir("./images/"))))
 
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")

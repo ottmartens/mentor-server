@@ -7,6 +7,7 @@ import (
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
 	"os"
+	"strings"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -21,6 +22,11 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 				next.ServeHTTP(w, r)
 				return
 			}
+		}
+
+		if strings.HasPrefix(r.URL.Path, "/api/images") {
+			next.ServeHTTP(w, r)
+			return
 		}
 
 		response := make(map[string]interface{})
