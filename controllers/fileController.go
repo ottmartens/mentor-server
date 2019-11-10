@@ -21,17 +21,23 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
+		return
 	}
 
 	_, err = io.Copy(&buf, file)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
+		return
 	}
 
 	err = ioutil.WriteFile(fmt.Sprintf("images/users/%s.png", email), []byte(buf.String()), 0666)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
+		return
 	}
+
+	account.ImageUrl = fmt.Sprintf("/api/images/users/%s.png", email)
+	models.GetDB().Save(account)
 
 	utils.Respond(w, utils.Message(true, "file received"))
 	return
