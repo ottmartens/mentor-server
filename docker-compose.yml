@@ -8,6 +8,8 @@ services:
         condition: on-failure
     ports:
       - "8000:8080"
+    volumes:
+      - pictures:/go/src/mentor-server/images
     networks:
       - backend
   mentor-db:
@@ -20,7 +22,6 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - pictures:/go/src/mentor-server/images
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
