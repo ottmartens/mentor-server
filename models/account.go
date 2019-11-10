@@ -33,6 +33,7 @@ type AuthResponse struct {
 	LastName  string `json:"lastName"`
 	ImageUrl  string `json:"imageUrl"`
 	Token     string `json:"token"`
+	Role      string `json:"role"`
 }
 
 func generateTokenWithId(id uint) string {
@@ -98,6 +99,7 @@ func (account *Account) Create() map[string]interface{} {
 		LastName:  account.LastName,
 		ImageUrl:  account.ImageUrl,
 		Token:     account.Token,
+		Role:      account.Role,
 	}
 	return response
 }
@@ -131,6 +133,7 @@ func Login(email, password string) map[string]interface{} {
 		LastName:  account.LastName,
 		ImageUrl:  account.ImageUrl,
 		Token:     account.Token,
+		Role:      account.Role,
 	}
 	return resp
 }
