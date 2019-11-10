@@ -82,14 +82,15 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
-	groupId, err := strconv.Atoi(mux.Vars(r)["id"])
-	if err != nil {
-		utils.Respond(w, utils.Message(false, "Invalid group id"))
+	userId := r.Context().Value("user").(uint)
+	user := models.GetUser(userId, false)
+
+	if user.GroupId == nil {
+		utils.Respond(w, utils.Message(false, "You do not belong to a group!"))
 		return
 	}
 
-	group := models.GetGroup(uint(groupId))
-
+	group := models.GetGroup(*user.GroupId)
 	if group == nil {
 		utils.Respond(w, utils.Message(false, "Group not found"))
 		return
@@ -101,7 +102,7 @@ func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
 		Description string `json:"description"`
 	}
 	profile := payload{}
-	err = json.NewDecoder(r.Body).Decode(&profile)
+	err := json.NewDecoder(r.Body).Decode(&profile)
 
 	if err != nil {
 		utils.Respond(w, utils.Message(false, "Invalid request"))
