@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
@@ -18,6 +19,28 @@ func GetUserSelf(w http.ResponseWriter, r *http.Request) {
 	resp["data"] = data
 
 	utils.Respond(w, resp)
+}
+
+func GetUserProfile(w http.ResponseWriter, r *http.Request) {
+
+	userId, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		utils.Respond(w, utils.Message(false, "Invalid user id"))
+		return
+	}
+
+	user := models.GetUser(uint(userId), true)
+	if user == nil {
+		utils.Respond(w, utils.Message(false, fmt.Sprintf("Cannot find user with id %d", userId)))
+		return
+	}
+
+	resp := utils.Message(true, "Success")
+
+	resp["data"] = user.GetPublicInfo()
+
+	utils.Respond(w, resp)
+	return
 }
 
 func EditUserProfile(w http.ResponseWriter, r *http.Request) {
