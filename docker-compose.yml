@@ -20,6 +20,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - pictures:/go/src/mentor-server/images
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -30,3 +31,4 @@ networks:
   backend:
 volumes:
   pgdata:
+  pictures:
