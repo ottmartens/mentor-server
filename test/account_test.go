@@ -1,4 +1,4 @@
-package models
+package test
 
 import (
 	"github.com/jinzhu/gorm"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAccountPublcProfile(t *testing.T) {
+func TestAccountPublicProfile(t *testing.T) {
 
 	account := models.Account{
 		Model: gorm.Model{
@@ -21,8 +21,8 @@ func TestAccountPublcProfile(t *testing.T) {
 	}
 
 	accountPublicProfile := models.AccountPublic{
-		FirstName: "Email",
-		LastName:  "PasswordHash",
+		FirstName: "FirstName",
+		LastName:  "LastName",
 		UserId:    1,
 		ImageUrl:  "",
 		Bio:       "Biography",

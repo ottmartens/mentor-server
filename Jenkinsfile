@@ -5,7 +5,7 @@ node {
     }
         
     stage('tests') {
-        echo 'no tests configured!'
+        sh 'go test ./test'
     }
     
     stage('build Docker image') {
