@@ -98,9 +98,9 @@ func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
 
 	type payload struct {
 		Title       string `json:"title"`
-		Tagline     string `json:"tagline"`
 		Description string `json:"description"`
 	}
+
 	profile := payload{}
 	err := json.NewDecoder(r.Body).Decode(&profile)
 
@@ -112,11 +112,8 @@ func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
 	if len(profile.Title) > 0 {
 		group.Title = profile.Title
 	}
-	if len(profile.Tagline) > 0 {
-		group.Title = profile.Tagline
-	}
 	if len(profile.Description) > 0 {
-		group.Title = profile.Description
+		group.Description = profile.Description
 	}
 
 	models.GetDB().Save(group)
