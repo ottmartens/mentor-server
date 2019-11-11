@@ -10,10 +10,10 @@ import (
 )
 
 func RequestGroupJoining(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
 
 	type payload struct {
 		GroupId uint `json:"groupId"`
-		UserId  uint `json:"userId"`
 	}
 	request := &payload{}
 
@@ -29,11 +29,8 @@ func RequestGroupJoining(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := models.GetUser(request.UserId, true)
-	if user == nil {
-		utils.Respond(w, utils.Message(false, "Invalid user id"))
-		return
-	}
+	user := models.GetUser(userId, true)
+
 	if user.Role != enums.UserTypes.Mentee {
 		utils.Respond(w, utils.Message(false, "User is not a mentee"))
 		return
@@ -42,7 +39,8 @@ func RequestGroupJoining(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, utils.Message(false, "User already belongs to a group"))
 		return
 	}
-	resp := models.CreateRequest(enums.RequestTypes.JoinGroup, request.UserId, request.GroupId)
+
+	resp := models.CreateRequest(enums.RequestTypes.JoinGroup, userId, request.GroupId)
 
 	utils.Respond(w, resp)
 }
