@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
@@ -35,10 +36,19 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, utils.Message(false, err.Error()))
 		return
 	}
-
 	account.ImageUrl = fmt.Sprintf("/api/images/users/%s.png", email)
 	models.GetDB().Save(account)
 
-	utils.Respond(w, utils.Message(true, "file received"))
+	resp := utils.Message(true, "file received")
+
+	type ResponseData struct {
+		ImageUrl string `json:"imageUrl"`
+	}
+	resp["data"] = ResponseData{
+		ImageUrl: account.ImageUrl,
+	}
+	time.Sleep(5 * time.Second)
+
+	utils.Respond(w, resp)
 	return
 }
