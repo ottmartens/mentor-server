@@ -7,16 +7,17 @@ import (
 )
 
 type AccountPublic struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	UserId    uint   `json:"userId"`
-	ImageUrl  string `json:"imageUrl"`
-	Bio       string `json:"bio"`
+	Name     string `json:"name"`
+	Tagline  string `json:"tagline"`
+	Degree   string `json:"degree"`
+	Year     string `json:"year"`
+	UserId   uint   `json:"userId"`
+	ImageUrl string `json:"imageUrl"`
+	Bio      string `json:"bio"`
 }
 
 type AvailableMentor struct {
-	FirstName        string `json:"firstName"`
-	LastName         string `json:"lastName"`
+	Name             string `json:"name"`
 	UserId           uint   `json:"userId"`
 	ImageUrl         string `json:"imageUrl"`
 	HasRequestedYou  bool   `json:"hasRequestedYou"`
@@ -56,8 +57,7 @@ func (account *Account) getGroupRequests(userId uint) AvailableMentor {
 	}
 
 	return AvailableMentor{
-		FirstName:        account.FirstName,
-		LastName:         account.LastName,
+		Name:             account.Name,
 		UserId:           account.ID,
 		ImageUrl:         account.ImageUrl,
 		YouHaveRequested: yourRequest.ID != 0,

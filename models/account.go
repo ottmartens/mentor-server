@@ -17,23 +17,24 @@ type Token struct {
 }
 type Account struct {
 	gorm.Model
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Token     string `json:"token";gorm:"-"`
-	Role      string `json:"role"`
-	GroupId   *uint  `json:"groupId"`
-	ImageUrl  string `json:"imageUrl"`
-	Bio       string `json:"bio"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+	Tagline  string `json:"tagline"`
+	Degree   string `json:"degree"`
+	Year     string `json:"year"`
+	Token    string `json:"token";gorm:"-"`
+	Role     string `json:"role"`
+	GroupId  *uint  `json:"groupId"`
+	ImageUrl string `json:"imageUrl"`
+	Bio      string `json:"bio"`
 }
 
 type AuthResponse struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	ImageUrl  string `json:"imageUrl"`
-	Token     string `json:"token"`
-	Role      string `json:"role"`
+	Name     string `json:"name"`
+	ImageUrl string `json:"imageUrl"`
+	Token    string `json:"token"`
+	Role     string `json:"role"`
 }
 
 func generateTokenWithId(id uint) string {
@@ -95,11 +96,10 @@ func (account *Account) Create() map[string]interface{} {
 
 	response := utils.Message(true, "Account has been created")
 	response["data"] = AuthResponse{
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		ImageUrl:  account.ImageUrl,
-		Token:     account.Token,
-		Role:      account.Role,
+		Name:     account.Name,
+		ImageUrl: account.ImageUrl,
+		Token:    account.Token,
+		Role:     account.Role,
 	}
 	return response
 }
@@ -129,22 +129,23 @@ func Login(email, password string) map[string]interface{} {
 	resp := utils.Message(true, "Logged in")
 
 	resp["data"] = AuthResponse{
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		ImageUrl:  account.ImageUrl,
-		Token:     account.Token,
-		Role:      account.Role,
+		Name:     account.Name,
+		ImageUrl: account.ImageUrl,
+		Token:    account.Token,
+		Role:     account.Role,
 	}
 	return resp
 }
 
 func (account *Account) GetPublicInfo() AccountPublic {
 	return AccountPublic{
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		UserId:    account.ID,
-		ImageUrl:  account.ImageUrl,
-		Bio:       account.Bio,
+		Name:     account.Name,
+		Tagline:  account.Tagline,
+		Degree:   account.Degree,
+		Year:     account.Year,
+		UserId:   account.ID,
+		ImageUrl: account.ImageUrl,
+		Bio:      account.Bio,
 	}
 }
 
