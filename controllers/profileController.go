@@ -47,36 +47,51 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("user").(uint)
 	//
 
-	type profile struct {
-		FirstName string `json:"firstName"`
-		LastName  string `json:"lastName"`
-		ImageUrl  string `json:"imageUrl"`
-		Bio       string `json:"bio"`
+	type request struct {
+		Name    string `json:"name"`
+		Tagline string `json:"tagline"`
+		Degree  string `json:"degree"`
+		Year    string `json:"year"`
+		Bio     string `json:"bio"`
 	}
 
-	request := profile{}
+	req := request{}
 
-	err := json.NewDecoder(r.Body).Decode(&request)
+	err := json.NewDecoder(r.Body).Decode(&req)
 
 	if err != nil {
 		utils.Respond(w, utils.Message(false, "Invalid request"))
 	}
 
 	user := models.GetUser(userId, false)
+	if user == nil {
+		utils.Respond(w, utils.Message(false, "user not found"))
+		return
+	}
 
-	if len(request.FirstName) > 0 {
-		user.FirstName = request.FirstName
+	if len(req.Name) > 0 {
+		user.Name = req.Name
 	}
-	if len(request.LastName) > 0 {
-		user.LastName = request.LastName
+	if len(req.Tagline) > 0 {
+		user.Tagline = req.Tagline
 	}
-	if len(request.Bio) > 0 {
-		user.Bio = request.Bio
+	if len(req.Degree) > 0 {
+		user.Degree = req.Degree
+	}
+	if len(req.Year) > 0 {
+		user.Year = req.Year
+	}
+	if len(req.Bio) > 0 {
+		user.Bio = req.Bio
 	}
 
 	models.GetDB().Save(user)
 
 	resp := utils.Message(true, "Profile successfully edited")
+
+	resp["data"] = struct {
+		Name string `json:"name"`
+	}{Name: user.Name}
 
 	utils.Respond(w, resp)
 }
@@ -96,12 +111,13 @@ func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	type payload struct {
+	type request struct {
 		Title       string `json:"title"`
+		Tagline     string `json:"tagline"`
 		Description string `json:"description"`
 	}
 
-	profile := payload{}
+	profile := request{}
 	err := json.NewDecoder(r.Body).Decode(&profile)
 
 	if err != nil {
@@ -114,6 +130,9 @@ func EditGroupProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(profile.Description) > 0 {
 		group.Description = profile.Description
+	}
+	if len(profile.Tagline) > 0 {
+		group.Tagline = profile.Tagline
 	}
 
 	models.GetDB().Save(group)
