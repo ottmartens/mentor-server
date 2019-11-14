@@ -12,20 +12,18 @@ func TestAccountPublicProfile(t *testing.T) {
 		Model: gorm.Model{
 			ID: 1,
 		},
-		Email:     "Email",
-		Password:  "PasswordHash",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "Role",
-		Bio:       "Biography",
+		Email:    "Email",
+		Password: "PasswordHash",
+		Name:     "FirstName LastName",
+		Role:     "Role",
+		Bio:      "Biography",
 	}
 
 	accountPublicProfile := models.AccountPublic{
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		UserId:    1,
-		ImageUrl:  "",
-		Bio:       "Biography",
+		Name:     "FirstName LastName",
+		UserId:   1,
+		ImageUrl: "",
+		Bio:      "Biography",
 	}
 
 	result := account.GetPublicInfo()
