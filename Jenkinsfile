@@ -29,4 +29,8 @@ node {
             sh 'docker stack deploy -c docker-compose.yml mentor'
         }
     }
+
+    stage('kill old containers') {
+        sh 'docker container prune -f'
+    }
 }
