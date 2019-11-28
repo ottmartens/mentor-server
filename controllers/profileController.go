@@ -45,7 +45,6 @@ func GetUserProfile(w http.ResponseWriter, r *http.Request) {
 
 func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("user").(uint)
-	//
 
 	type request struct {
 		Name    string `json:"name"`

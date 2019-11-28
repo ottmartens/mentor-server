@@ -36,6 +36,8 @@ func main() {
 	router.HandleFunc("/api/groups/join", controllers.RequestGroupJoining).Methods("POST")
 	router.HandleFunc("/api/groups/accept-joining", controllers.HandleJoining).Methods("POST")
 
+	router.HandleFunc("/api/template-activities", controllers.GetTemplateActivities).Methods("GET")
+
 	router.PathPrefix("/api/images/").Handler(http.StripPrefix("/api/images/", http.FileServer(http.Dir("./images/"))))
 
 	// Temporary dev routes
