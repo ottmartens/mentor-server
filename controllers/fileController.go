@@ -30,7 +30,9 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	imageId := utils.Uuid(12)
-	imageUrl := fmt.Sprintf("/images/users/%s.png", imageId)
+	imagePath := fmt.Sprintf("images/users/%s.png", imageId)
+
+	imageUrl := "/api/" + imagePath
 
 	err = ioutil.WriteFile(imageUrl, []byte(buf.String()), 0666)
 	if err != nil {
