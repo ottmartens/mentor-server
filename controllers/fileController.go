@@ -44,7 +44,7 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 	// Delete old file if present
 	if account.ImageUrl != "" {
 		oldImagePath := account.ImageUrl[5:len(account.ImageUrl)]
-		fmt.Printf("Attempting to delete file at %s\n", oldImagePath)
+		fmt.Printf("Attempting to delete file at %s - ", oldImagePath)
 
 		var _, err = os.Stat(oldImagePath)
 
@@ -52,14 +52,14 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 			err = os.Remove(oldImagePath)
 
 			if err == nil {
-				fmt.Println("Successfully removed image")
+				fmt.Println("success!")
 			} else {
-				fmt.Println("Error while removing the image")
+				fmt.Println("unsuccessful")
 			}
 		} else if os.IsNotExist(err) {
-			fmt.Println("Could not find the image")
+			fmt.Println("file not found")
 		} else {
-			fmt.Println("Did not get fileStat")
+			fmt.Println("error getting fileStat")
 		}
 	}
 
