@@ -34,7 +34,7 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 
 	imageUrl := "/api/" + imagePath
 
-	err = ioutil.WriteFile(imageUrl, []byte(buf.String()), 0666)
+	err = ioutil.WriteFile(imagePath, []byte(buf.String()), 0666)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
 		return
