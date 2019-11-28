@@ -84,6 +84,11 @@ func EditUserProfile(w http.ResponseWriter, r *http.Request) {
 		user.Bio = req.Bio
 	}
 
+	if user.IsVerified != nil && *user.IsVerified == false {
+		user.IsVerified = nil
+		user.RejectionReason = ""
+	}
+
 	models.GetDB().Save(user)
 
 	resp := utils.Message(true, "Profile successfully edited")
