@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
@@ -39,6 +40,29 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, utils.Message(false, err.Error()))
 		return
 	}
+
+	// Delete old file if present
+	if account.ImageUrl != "" {
+		oldImagePath := account.ImageUrl[5 : len(account.ImageUrl)-1]
+		fmt.Printf("Attempting to delete file at %s\n", oldImagePath)
+
+		var _, err = os.Stat(oldImagePath)
+
+		if err == nil {
+			err = os.Remove(oldImagePath)
+
+			if err == nil {
+				fmt.Println("Successfully removed image")
+			} else {
+				fmt.Println("Error while removing the image")
+			}
+		} else if os.IsNotExist(err) {
+			fmt.Println("Could not find the image")
+		} else {
+			fmt.Println("Did not get fileStat")
+		}
+	}
+
 	account.ImageUrl = imageUrl
 	models.GetDB().Save(account)
 
