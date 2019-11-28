@@ -11,7 +11,18 @@ import (
 var db *gorm.DB
 
 func init() {
+	openDBConnection()
+}
 
+func GetDB() *gorm.DB {
+	// Make sure we are connected to a database
+	if err := db.DB().Ping(); err != nil {
+		openDBConnection()
+	}
+	return db
+}
+
+func openDBConnection() {
 	e := godotenv.Load()
 	if e != nil {
 		fmt.Print(e)
@@ -32,8 +43,4 @@ func init() {
 
 	db = conn
 	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{})
-}
-
-func GetDB() *gorm.DB {
-	return db
 }
