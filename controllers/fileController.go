@@ -8,14 +8,12 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
-
 	userId := r.Context().Value("user").(uint)
+
 	account := models.GetUser(userId, false)
-	email := account.Email
 
 	var buf bytes.Buffer
 
@@ -31,12 +29,15 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ioutil.WriteFile(fmt.Sprintf("images/users/%s.png", email), []byte(buf.String()), 0666)
+	imageId := utils.Uuid(12)
+	imageUrl := fmt.Sprintf("images/users/%s.png", imageId)
+
+	err = ioutil.WriteFile(imageUrl, []byte(buf.String()), 0666)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
 		return
 	}
-	account.ImageUrl = fmt.Sprintf("/api/images/users/%s.png", email)
+	account.ImageUrl = imageUrl
 	models.GetDB().Save(account)
 
 	resp := utils.Message(true, "file received")
@@ -47,7 +48,6 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 	resp["data"] = ResponseData{
 		ImageUrl: account.ImageUrl,
 	}
-	time.Sleep(5 * time.Second)
 
 	utils.Respond(w, resp)
 	return
