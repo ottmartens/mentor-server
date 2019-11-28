@@ -38,10 +38,13 @@ func main() {
 
 	router.HandleFunc("/api/template-activities", controllers.GetTemplateActivities).Methods("GET")
 
-	router.PathPrefix("/api/images/").Handler(http.StripPrefix("/api/images/", http.FileServer(http.Dir("./images/"))))
+	// Admin routes
 
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
+
+	// File server
+	router.PathPrefix("/api/images/").Handler(http.StripPrefix("/api/images/", http.FileServer(http.Dir("./images/"))))
 
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
