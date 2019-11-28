@@ -17,17 +17,18 @@ type Token struct {
 }
 type Account struct {
 	gorm.Model
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	Tagline  string `json:"tagline"`
-	Degree   string `json:"degree"`
-	Year     string `json:"year"`
-	Token    string `json:"token";gorm:"-"`
-	Role     string `json:"role"`
-	GroupId  *uint  `json:"groupId"`
-	ImageUrl string `json:"imageUrl"`
-	Bio      string `json:"bio"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	Name       string `json:"name"`
+	Tagline    string `json:"tagline"`
+	Degree     string `json:"degree"`
+	Year       string `json:"year"`
+	Token      string `json:"token";gorm:"-"`
+	Role       string `json:"role"`
+	GroupId    *uint  `json:"groupId"`
+	ImageUrl   string `json:"imageUrl"`
+	Bio        string `json:"bio"`
+	IsVerified bool   `json:"isVerified"`
 }
 
 type AuthResponse struct {
