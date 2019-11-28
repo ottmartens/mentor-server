@@ -43,7 +43,7 @@ var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
 
 	// Delete old file if present
 	if account.ImageUrl != "" {
-		oldImagePath := account.ImageUrl[5 : len(account.ImageUrl)-1]
+		oldImagePath := account.ImageUrl[5:len(account.ImageUrl)]
 		fmt.Printf("Attempting to delete file at %s\n", oldImagePath)
 
 		var _, err = os.Stat(oldImagePath)
