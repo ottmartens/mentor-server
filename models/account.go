@@ -28,7 +28,7 @@ type Account struct {
 	GroupId         *uint  `json:"groupId"`
 	ImageUrl        string `json:"imageUrl"`
 	Bio             string `json:"bio"`
-	IsVerified      bool   `json:"isVerified"`
+	IsVerified      *bool  `json:"isVerified"`
 	RejectionReason string `json:"rejectionReason"`
 }
 

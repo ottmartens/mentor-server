@@ -39,6 +39,7 @@ func main() {
 	router.HandleFunc("/api/template-activities", controllers.GetTemplateActivities).Methods("GET")
 
 	// Admin routes
+	router.HandleFunc("/api/user/verify", controllers.VerifyUser).Methods("POST")
 
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
