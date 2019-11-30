@@ -65,7 +65,7 @@ func GetGroups() []GroupWithMentors {
 		return nil
 	}
 
-	var resp []GroupWithMentors
+	resp := make([]GroupWithMentors, 0)
 
 	for _, group := range groups {
 		resp = append(resp, group.GetMentors())
