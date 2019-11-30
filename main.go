@@ -38,6 +38,8 @@ func main() {
 
 	router.HandleFunc("/api/template-activities", controllers.GetTemplateActivities).Methods("GET")
 
+	router.HandleFunc("/api/activity", controllers.AddGroupActivity).Methods("POST")
+
 	// Admin routes
 	router.HandleFunc("/api/user/verify", controllers.VerifyUser).Methods("POST")
 

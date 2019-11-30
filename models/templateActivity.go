@@ -16,6 +16,15 @@ func GetTemplateActivities() []TemplateActivity {
 	return templateActivities
 }
 
+func GetTemplateActivity(id uint) *TemplateActivity {
+
+	templateActivity := &TemplateActivity{}
+
+	_ = GetDB().Table("template_activities").Where("id = ?", id).First(templateActivity)
+
+	return templateActivity
+}
+
 func (templateActivity *TemplateActivity) Save() {
 	GetDB().Save(templateActivity)
 }

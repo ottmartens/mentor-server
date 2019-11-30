@@ -4,8 +4,8 @@ import "github.com/jinzhu/gorm"
 
 type Activity struct {
 	gorm.Model
-	GroupId         string   `json:"groupId"`
-	TemplateId      string   `json:"templateId"`
+	GroupId         uint     `json:"groupId"`
+	TemplateId      *uint    `json:"templateId"`
 	Name            string   `json:"name"`
 	Points          uint     `json:"points"`
 	Time            string   `json:"time"`
