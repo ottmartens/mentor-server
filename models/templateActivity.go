@@ -11,11 +11,11 @@ type TemplateActivity struct {
 
 func GetTemplateActivities() []TemplateActivity {
 	templateActivities := make([]TemplateActivity, 0)
-	err := GetDB().Table("template_activities").Find(&templateActivities).Error
-
-	if err != nil {
-		return nil
-	}
+	_ = GetDB().Table("template_activities").Find(&templateActivities).Error
 
 	return templateActivities
+}
+
+func (templateActivity *TemplateActivity) Save() {
+	GetDB().Save(templateActivity)
 }
