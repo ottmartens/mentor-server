@@ -58,5 +58,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.Delete()
+
 	utils.Respond(w, utils.Message(true, "Account successfully deleted!"))
 }
