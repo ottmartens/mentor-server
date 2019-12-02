@@ -37,6 +37,14 @@ func UploadActivityImage(w http.ResponseWriter, r *http.Request) {
 	imagePath := fmt.Sprintf("images/%d/%s.png", user.GroupId, imageId)
 	imageUrl := "/api/" + imagePath
 
+	if _, err := os.Stat(fmt.Sprintf("images/%d", user.GroupId)); os.IsNotExist(err) {
+		err = os.Mkdir(fmt.Sprintf("images/%d", user.GroupId), 0666)
+		if err != nil {
+			utils.Respond(w, utils.Message(false, err.Error()))
+			return
+		}
+	}
+
 	err = ioutil.WriteFile(imagePath, []byte(buf.String()), 0666)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, err.Error()))
