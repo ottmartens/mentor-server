@@ -23,8 +23,9 @@ func GetTemplateActivities(w http.ResponseWriter, _ *http.Request) {
 }
 
 func AddTemplateActivity(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
 
-	if !isAdmin(r) {
+	if !models.IsAdmin(userId) {
 		utils.Respond(w, utils.Message(false, "not permitted"))
 		return
 	}

@@ -15,7 +15,7 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 	user := models.GetUser(userId, false)
 
 	if user.Role != UserTypes.Mentor || user.GroupId == nil {
-		utils.Respond(w, utils.Message(false, "No groupID, or you are not a mentor"))
+		utils.Respond(w, utils.Message(false, "No groupId, or you are not a mentor"))
 		return
 	}
 
@@ -73,4 +73,41 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.Respond(w, utils.Message(true, "Activity successfully added!"))
+}
+
+func VerifyActivity(w http.ResponseWriter, r *http.Request) {
+
+	userId := r.Context().Value("user").(uint)
+	if !models.IsAdmin(userId) {
+		utils.Respond(w, utils.Message(false, "Not permitted"))
+		return
+	}
+
+	type request struct {
+		ActivityId      uint   `json:"id"`
+		Accept          bool   `json:"accept"`
+		RejectionReason string `json:"rejectionReason"`
+		Points          int    `json:"points"`
+	}
+
+	payload := request{}
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		utils.Respond(w, utils.Message(false, "Invalid request"))
+		return
+	}
+
+	activity := models.GetActivity(payload.ActivityId)
+
+	if activity == nil {
+		utils.Respond(w, utils.Message(false, "Activity not found"))
+		return
+	}
+
+	if payload.Accept {
+
+	} else {
+
+	}
 }

@@ -38,15 +38,15 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 
 func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 
-	userId, err := strconv.Atoi(mux.Vars(r)["id"])
+	userIdInt, err := strconv.Atoi(mux.Vars(r)["id"])
 	requesterId := r.Context().Value("user").(uint)
-
+	userId := uint(userIdInt)
 	if err != nil {
 		utils.Respond(w, utils.Message(false, "Invalid user id"))
 		return
 	}
 
-	if !isAdmin(r) && uint(userId) != requesterId {
+	if !models.IsAdmin(userId) && userId != requesterId {
 		utils.Respond(w, utils.Message(false, "not permitted"))
 		return
 	}
@@ -61,4 +61,37 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	user.Delete()
 
 	utils.Respond(w, utils.Message(true, "Account successfully deleted!"))
+}
+
+func VerifyUser(w http.ResponseWriter, r *http.Request) {
+	requesterId := r.Context().Value("user").(uint)
+
+	if !models.IsAdmin(requesterId) {
+		utils.Respond(w, utils.Message(false, "not permitted"))
+		return
+	}
+
+	type request struct {
+		UserID          uint   `json:"userId"`
+		Accept          bool   `json:"accept"`
+		RejectionReason string `json:"rejectionReason"`
+	}
+
+	payload := request{}
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+
+	if err != nil {
+		utils.Respond(w, utils.Message(false, "Invalid payload"))
+		return
+	}
+
+	user := models.GetUser(payload.UserID, false)
+
+	user.IsVerified = &payload.Accept
+	user.RejectionReason = payload.RejectionReason
+
+	models.GetDB().Save(user)
+
+	utils.Respond(w, utils.Message(true, "success"))
 }

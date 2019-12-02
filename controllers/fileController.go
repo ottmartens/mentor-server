@@ -11,7 +11,51 @@ import (
 	"os"
 )
 
-var GetUserImage = func(w http.ResponseWriter, r *http.Request) {
+func UploadActivityImage(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
+
+	user := models.GetUser(userId, true)
+	if user.GroupId == nil {
+		utils.Respond(w, utils.Message(false, "You do not have a group to add activities to"))
+		return
+	}
+
+	var buf bytes.Buffer
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.Respond(w, utils.Message(false, err.Error()))
+		return
+	}
+
+	_, err = io.Copy(&buf, file)
+	if err != nil {
+		utils.Respond(w, utils.Message(false, err.Error()))
+		return
+	}
+
+	imageId := utils.Uuid(12)
+	imagePath := fmt.Sprintf("images/%d/%s.png", user.GroupId, imageId)
+	imageUrl := "/api/" + imagePath
+
+	err = ioutil.WriteFile(imagePath, []byte(buf.String()), 0666)
+	if err != nil {
+		utils.Respond(w, utils.Message(false, err.Error()))
+		return
+	}
+
+	resp := utils.Message(true, "file received")
+	type ResponseData struct {
+		ImageUrl string `json:"imageUrl"`
+	}
+	resp["data"] = ResponseData{
+		ImageUrl: imageUrl,
+	}
+
+	utils.Respond(w, resp)
+	return
+}
+
+func GetUserImage(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("user").(uint)
 
 	account := models.GetUser(userId, false)

@@ -172,6 +172,5 @@ func (account *Account) SetGroupId(groupId uint) {
 }
 
 func (account *Account) Delete() {
-	err := GetDB().Delete(account).Error
-	fmt.Println(err)
+	GetDB().Delete(account)
 }

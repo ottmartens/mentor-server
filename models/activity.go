@@ -17,3 +17,10 @@ type Activity struct {
 	IsVerified      *bool          `json:"isVerified"`
 	RejectionReason string         `json:"rejectionReason"`
 }
+
+func GetActivity(id uint) *Activity {
+	activity := &Activity{}
+
+	GetDB().Table("activities").Where("id = ?", id).First(activity)
+	return activity
+}

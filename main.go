@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/ottmartens/mentor-server/app"
 	"github.com/ottmartens/mentor-server/controllers"
+	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
 	"net/http"
 )
@@ -13,7 +13,7 @@ import (
 func main() {
 
 	router := mux.NewRouter()
-	router.Use(app.JwtAuthentication)
+	router.Use(models.JwtAuthentication)
 
 	router.HandleFunc("/api/health", utils.HealthCheck).Methods("GET")
 
@@ -40,10 +40,11 @@ func main() {
 	router.HandleFunc("/api/template-activities", controllers.GetTemplateActivities).Methods("GET")
 
 	router.HandleFunc("/api/activity", controllers.AddGroupActivity).Methods("POST")
+	router.HandleFunc("/api/activity/image", controllers.UploadActivityImage).Methods("POST")
 
 	// Admin routes
 	router.HandleFunc("/api/user/verify", controllers.VerifyUser).Methods("POST")
-
+	router.HandleFunc("/api/activity/verify", controllers.VerifyActivity).Methods("POST")
 	router.HandleFunc("/api/template-activities", controllers.AddTemplateActivity).Methods("POST")
 
 	// Temporary dev routes
