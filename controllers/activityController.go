@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
 	. "github.com/ottmartens/mentor-server/utils/enums"
@@ -14,7 +15,7 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 	user := models.GetUser(userId, false)
 
 	if user.Role != UserTypes.Mentor || user.GroupId == nil {
-		utils.Respond(w, utils.Message(false, "Not allowed"))
+		utils.Respond(w, utils.Message(false, "No groupID, or you are not a mentor"))
 		return
 	}
 
@@ -22,7 +23,7 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 		TemplateId   *uint    `json:"templateId"`
 		Name         string   `json:"name"`
 		Time         string   `json:"time"`
-		Participants []uint   `json:"participants"`
+		Participants []int64  `json:"participants"`
 		Images       []string `json:"images"`
 	}
 
@@ -64,7 +65,12 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 	activity.Time = payload.Time
 	activity.Images = payload.Images
 
-	models.GetDB().Save(activity)
+	err = models.GetDB().Save(&activity).Error
+	if err != nil {
+		fmt.Println("Error adding activity:", err)
+		utils.Respond(w, utils.Message(false, "Error adding activity"))
+		return
+	}
 
 	utils.Respond(w, utils.Message(true, "Activity successfully added!"))
 }

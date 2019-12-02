@@ -42,5 +42,5 @@ func openDBConnection() {
 	}
 
 	db = conn
-	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{})
+	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{}, &Activity{})
 }

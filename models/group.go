@@ -29,6 +29,7 @@ type GroupDetails struct {
 	Mentors     []AccountPublic `json:"mentors"`
 	Mentees     []AccountPublic `json:"mentees"`
 	Requests    []AccountPublic `json:"requests"`
+	Activities  []Activity      `json:"activities"`
 }
 
 func GetGroup(id uint) *Group {
@@ -156,6 +157,7 @@ func (group *Group) GetDetails() GroupDetails {
 		Mentors:     []AccountPublic{},
 		Mentees:     []AccountPublic{},
 		Requests:    []AccountPublic{},
+		Activities:  []Activity{},
 	}
 
 	mentors := make([]*Account, 0)
@@ -184,6 +186,11 @@ func (group *Group) GetDetails() GroupDetails {
 	for _, request := range joiningRequests {
 		user := GetUser(request.Initiator, true)
 		groupDetails.Requests = append(groupDetails.Requests, user.GetPublicInfo())
+	}
+
+	err = GetDB().Table("activities").Where("group_id = ?", group.ID).Find(&groupDetails.Activities).Error
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	return groupDetails
