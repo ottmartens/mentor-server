@@ -7,13 +7,14 @@ import (
 )
 
 type AccountPublic struct {
-	Name     string `json:"name"`
-	Tagline  string `json:"tagline"`
-	Degree   string `json:"degree"`
-	Year     string `json:"year"`
-	UserId   uint   `json:"userId"`
-	ImageUrl string `json:"imageUrl"`
-	Bio      string `json:"bio"`
+	Name       string `json:"name"`
+	Tagline    string `json:"tagline"`
+	Degree     string `json:"degree"`
+	Year       string `json:"year"`
+	UserId     uint   `json:"userId"`
+	ImageUrl   string `json:"imageUrl"`
+	Bio        string `json:"bio"`
+	IsVerified *bool  `json:"isVerified"`
 }
 
 type AvailableMentor struct {

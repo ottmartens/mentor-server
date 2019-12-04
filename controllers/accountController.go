@@ -81,7 +81,7 @@ func VerifyUser(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&payload)
 
-	if err != nil {
+	if err != nil || payload.UserID == 0 {
 		utils.Respond(w, utils.Message(false, "Invalid payload"))
 		return
 	}

@@ -141,13 +141,14 @@ func Login(email, password string) map[string]interface{} {
 
 func (account *Account) GetPublicInfo() AccountPublic {
 	return AccountPublic{
-		Name:     account.Name,
-		Tagline:  account.Tagline,
-		Degree:   account.Degree,
-		Year:     account.Year,
-		UserId:   account.ID,
-		ImageUrl: account.ImageUrl,
-		Bio:      account.Bio,
+		Name:       account.Name,
+		Tagline:    account.Tagline,
+		Degree:     account.Degree,
+		Year:       account.Year,
+		UserId:     account.ID,
+		ImageUrl:   account.ImageUrl,
+		Bio:        account.Bio,
+		IsVerified: account.IsVerified,
 	}
 }
 
