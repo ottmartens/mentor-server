@@ -32,7 +32,7 @@ func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&payload)
 
 	if err != nil || len(payload.Time) == 0 || len(payload.Name) == 0 || len(payload.Images) == 0 {
-		utils.Respond(w, utils.Message(false, "Invalid request"))
+		utils.Respond(w, utils.Message(false, "Invalid request. Please provide time, name, and at least one image."))
 		return
 	}
 
@@ -87,7 +87,7 @@ func VerifyActivity(w http.ResponseWriter, r *http.Request) {
 		ActivityId      uint   `json:"id"`
 		Accept          bool   `json:"accept"`
 		RejectionReason string `json:"rejectionReason"`
-		Points          int    `json:"points"`
+		Points          uint   `json:"points"`
 	}
 
 	payload := request{}
@@ -107,6 +107,21 @@ func VerifyActivity(w http.ResponseWriter, r *http.Request) {
 
 	activity.IsVerified = &payload.Accept
 	activity.RejectionReason = payload.RejectionReason
+
+	if payload.Accept {
+		if activity.TemplateId != nil {
+			templateActivity := models.GetTemplateActivity(*activity.TemplateId)
+
+			if templateActivity == nil {
+				utils.Respond(w, utils.Message(false, "Cannot verify - linked template activity not found"))
+				return
+			}
+
+			activity.Points = templateActivity.Points
+		} else {
+			activity.Points = payload.Points
+		}
+	}
 
 	models.GetDB().Save(activity)
 
