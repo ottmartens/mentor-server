@@ -18,6 +18,12 @@ type Activity struct {
 	RejectionReason string         `json:"rejectionReason"`
 }
 
+type UnverifiedActivity struct {
+	Name      string `json:"name"`
+	ID        uint
+	GroupName string `json:"groupName"`
+}
+
 func GetActivity(id uint) *Activity {
 	activity := &Activity{}
 
@@ -25,10 +31,22 @@ func GetActivity(id uint) *Activity {
 	return activity
 }
 
-func GetUnverifiedActivities() []Activity {
+func GetUnverifiedActivities() []UnverifiedActivity {
 	activities := make([]Activity, 0)
 
 	GetDB().Table("activities").Where("is_verified IS NULL").Find(&activities)
 
-	return activities
+	unverifiedActivities := make([]UnverifiedActivity, 0)
+
+	for _, activity := range activities {
+		group := GetGroup(activity.GroupId)
+
+		unverifiedActivities = append(unverifiedActivities, UnverifiedActivity{
+			Name:      activity.Name,
+			ID:        activity.ID,
+			GroupName: group.Title,
+		})
+	}
+
+	return unverifiedActivities
 }
