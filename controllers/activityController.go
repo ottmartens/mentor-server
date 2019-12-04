@@ -111,3 +111,18 @@ func VerifyActivity(w http.ResponseWriter, r *http.Request) {
 
 	}
 }
+
+func GetUnverifiedActivities(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("user").(uint)
+	if !models.IsAdmin(userId) {
+		utils.Respond(w, utils.Message(false, "Not permitted"))
+		return
+	}
+
+	activities := models.GetUnverifiedActivities()
+
+	resp := utils.Message(true, "success")
+
+	resp["data"] = activities
+	utils.Respond(w, resp)
+}

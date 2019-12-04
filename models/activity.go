@@ -24,3 +24,11 @@ func GetActivity(id uint) *Activity {
 	GetDB().Table("activities").Where("id = ?", id).First(activity)
 	return activity
 }
+
+func GetUnverifiedActivities() []Activity {
+	activities := make([]Activity, 0)
+
+	GetDB().Table("activities").Where("is_verified IS NULL").Find(&activities)
+
+	return activities
+}
