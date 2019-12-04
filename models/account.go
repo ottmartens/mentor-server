@@ -174,3 +174,20 @@ func (account *Account) SetGroupId(groupId uint) {
 func (account *Account) Delete() {
 	GetDB().Delete(account)
 }
+
+func GetAllUsers(hidePassword bool) []Account {
+	users := make([]Account, 0)
+
+	GetDB().Table("accounts").Find(&users)
+
+	if hidePassword {
+		response := make([]Account, 0)
+		for _, account := range users {
+			account.Password = ""
+			response = append(response, account)
+		}
+		return response
+	} else {
+		return users
+	}
+}

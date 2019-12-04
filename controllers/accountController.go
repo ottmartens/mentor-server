@@ -95,3 +95,19 @@ func VerifyUser(w http.ResponseWriter, r *http.Request) {
 
 	utils.Respond(w, utils.Message(true, "success"))
 }
+
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	requesterId := r.Context().Value("user").(uint)
+
+	if !models.IsAdmin(requesterId) {
+		utils.Respond(w, utils.Message(false, "not permitted"))
+		return
+	}
+
+	users := models.GetAllUsers(true)
+
+	resp := utils.Message(true, "success")
+	resp["data"] = users
+
+	utils.Respond(w, resp)
+}
