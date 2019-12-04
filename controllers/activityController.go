@@ -105,11 +105,12 @@ func VerifyActivity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if payload.Accept {
+	activity.IsVerified = &payload.Accept
+	activity.RejectionReason = payload.RejectionReason
 
-	} else {
+	models.GetDB().Save(activity)
 
-	}
+	utils.Respond(w, utils.Message(true, "success"))
 }
 
 func GetUnverifiedActivities(w http.ResponseWriter, r *http.Request) {
