@@ -12,6 +12,7 @@ var db *gorm.DB
 
 func init() {
 	openDBConnection()
+	InitializeGlobalSettings()
 }
 
 func GetDB() *gorm.DB {
@@ -42,5 +43,5 @@ func openDBConnection() {
 	}
 
 	db = conn
-	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{}, &Activity{})
+	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{}, &Activity{}, &GlobalSetting{})
 }

@@ -42,12 +42,15 @@ func main() {
 	router.HandleFunc("/api/activity", controllers.AddGroupActivity).Methods("POST")
 	router.HandleFunc("/api/activity/image", controllers.UploadActivityImage).Methods("POST")
 
+	router.HandleFunc("/api/global-settings", controllers.GetGlobalSettings).Methods("GET")
+
 	// Admin routes
 	router.HandleFunc("/api/user/verify", controllers.VerifyUser).Methods("POST")
 	router.HandleFunc("/api/activity/verify", controllers.VerifyActivity).Methods("POST")
 	router.HandleFunc("/api/template-activities", controllers.AddTemplateActivity).Methods("POST")
 	router.HandleFunc("/api/all-users", controllers.GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/unverified-activities", controllers.GetUnverifiedActivities).Methods("GET")
+	router.HandleFunc("/api/global-settings", controllers.SetGlobalSettings).Methods("POST")
 
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
