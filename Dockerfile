@@ -8,7 +8,7 @@ RUN go get -d -v ./...
 
 RUN go install -v ./...
 
-RUN go test test
+RUN go test ./test
 
 EXPOSE 8080
 
