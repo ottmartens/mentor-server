@@ -23,7 +23,7 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-func openDBConnection() {
+func openDBConnection() interface{} {
 	e := godotenv.Load()
 	if e != nil {
 		fmt.Print(e)
@@ -44,4 +44,5 @@ func openDBConnection() {
 
 	db = conn
 	db.Debug().AutoMigrate(&Account{}, &Group{}, &Request{}, &TemplateActivity{}, &Activity{}, &GlobalSetting{})
+	return nil
 }
