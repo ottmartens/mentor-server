@@ -13,7 +13,7 @@ import (
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		notAuth := []string{"/api/health", "/api/user/new", "/api/user/login"}
+		notAuth := []string{"/api/health", "/api/user/new", "/api/user/login", "/api/global-settings"}
 		requestPath := r.URL.Path
 
 		for _, value := range notAuth {
