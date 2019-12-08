@@ -51,7 +51,7 @@ func main() {
 	router.HandleFunc("/api/template-activities", controllers.AddTemplateActivity).Methods("POST")
 	router.HandleFunc("/api/all-users", controllers.GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/unverified-activities", controllers.GetUnverifiedActivities).Methods("GET")
-	router.HandleFunc("/api/global-settings", controllers.SetGlobalSettings).Methods("POST")
+	router.HandleFunc("/api/set-global-settings", controllers.SetGlobalSettings).Methods("POST")
 
 	// Temporary dev routes
 	router.HandleFunc("/api/group/create", controllers.CreateGroupDirectly).Methods("POST")
