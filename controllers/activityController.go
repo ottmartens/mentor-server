@@ -3,10 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/ottmartens/mentor-server/models"
 	"github.com/ottmartens/mentor-server/utils"
 	. "github.com/ottmartens/mentor-server/utils/enums"
 	"net/http"
+	"strconv"
 )
 
 func AddGroupActivity(w http.ResponseWriter, r *http.Request) {
@@ -140,5 +142,26 @@ func GetUnverifiedActivities(w http.ResponseWriter, r *http.Request) {
 	resp := utils.Message(true, "success")
 
 	resp["data"] = activities
+	utils.Respond(w, resp)
+}
+func GetActivity(w http.ResponseWriter, r *http.Request) {
+	activityId, err := strconv.Atoi(mux.Vars(r)["id"])
+
+	if err != nil {
+		utils.Respond(w, utils.Message(false, "Invalid request"))
+		return
+	}
+
+	activity := models.GetActivity(uint(activityId))
+
+	if activity == nil || activity.ID == 0 {
+		utils.Respond(w, utils.Message(false, "activity not found"))
+		return
+	}
+
+	resp := utils.Message(true, "success")
+
+	resp["data"] = activity
+
 	utils.Respond(w, resp)
 }

@@ -41,6 +41,7 @@ func main() {
 
 	router.HandleFunc("/api/activity", controllers.AddGroupActivity).Methods("POST")
 	router.HandleFunc("/api/activity/image", controllers.UploadActivityImage).Methods("POST")
+	router.HandleFunc("/api/activity/{id}", controllers.GetActivity).Methods("GET")
 
 	router.HandleFunc("/api/global-settings", controllers.GetGlobalSettings).Methods("GET")
 
