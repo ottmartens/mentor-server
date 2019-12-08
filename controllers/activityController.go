@@ -159,9 +159,22 @@ func GetActivity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	group := models.GetGroupDetails(activity.GroupId)
+
 	resp := utils.Message(true, "success")
 
-	resp["data"] = activity
+	participants := make([]models.AccountPublic, 0)
+
+	for _, participantId := range activity.Participants {
+		user := models.GetUser(uint(participantId), true).GetPublicInfo()
+		participants = append(participants, user)
+	}
+
+	resp["data"] = map[string]interface{}{
+		"activity":     activity,
+		"groupName":    group.Title,
+		"participants": participants,
+	}
 
 	utils.Respond(w, resp)
 }
