@@ -4,7 +4,8 @@ WORKDIR /go/src/mentor-server
 
 COPY . .
 
-RUN go get -v ./...
+RUN go get -u -v ./...
+
 
 RUN go test ./test
 
