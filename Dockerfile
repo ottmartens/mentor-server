@@ -9,7 +9,7 @@ RUN go get -v ./...
 # Tests dependency
 RUN go get gopkg.in/gavv/httpexpect.v2
 
-RUN go test ./test
+RUN go test ./test -v
 
 EXPOSE 8080
 
