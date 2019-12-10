@@ -14,10 +14,6 @@ node {
         sh 'docker push localhost:5000/mentor-server-local'
     }
 
-    stage('remove old local images') {
-        sh 'docker image remove mentor-server'
-        sh 'docker image remove localhost:5000/mentor-server-local'
-    }
     
     stage('deploy & reload service') {
 
