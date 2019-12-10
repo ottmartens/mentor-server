@@ -6,6 +6,7 @@ node {
     
     stage('build Docker image, run tests') {
         sh 'cp /srv/mentor-server/.env .'
+        sh 'cp /srv/mentor-server/.env ./test'
         sh 'docker build -t mentor-server .'
     }
 
@@ -28,5 +29,6 @@ node {
 
     stage('kill old containers') {
         sh 'docker container prune -f'
+        sh 'docker image prune -f'
     }
 }
