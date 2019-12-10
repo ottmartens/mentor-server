@@ -1,6 +1,7 @@
 package test
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/ottmartens/mentor-server/models"
 	"testing"
 )
@@ -14,20 +15,25 @@ const (
 var (
 	TestUserToken  string
 	TestUserToken2 string
+	TestGroupID    uint
+	db             *gorm.DB
 )
 
 func TestMain(m *testing.M) {
-	_ = models.GetDB() // Initialize DB connection
+	db = models.GetDB() // Initialize DB connection
 	m.Run()
 	removeTestingData()
 }
 
 func removeTestingData() {
 	testAccount := models.Account{}
-	models.GetDB().Table("accounts").Where("email = ?", TestEmail).Find(&testAccount)
-	models.GetDB().Unscoped().Delete(testAccount)
-	models.GetDB().Unscoped().Where("email = ?", TestEmail2).Delete(models.Account{})
-	models.GetDB().Unscoped().Where("initiator = ?", testAccount.ID).Delete(models.Request{})
+	db.Table("accounts").Where("email = ?", TestEmail).Find(&testAccount)
+	db.Unscoped().Delete(testAccount)
+	db.Unscoped().Where("email = ?", TestEmail2).Delete(models.Account{})
+	db.Unscoped().Where("initiator = ?", testAccount.ID).Delete(models.Request{})
+	db.Unscoped().Where("id = ?", TestGroupID).Delete(models.Group{})
+
 	TestUserToken = ""
 	TestUserToken2 = ""
+	TestGroupID = 0
 }
