@@ -4,7 +4,7 @@ node {
         git 'https://github.com/ottmartens/mentor-server'
     }
 
-     stage('build Docker image, run tests') {
+     stage('get env') {
         sh 'cp /srv/mentor-server/.env .'
         sh 'cp /srv/mentor-server/.env ./test'
     }
