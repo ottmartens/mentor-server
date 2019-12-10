@@ -4,7 +4,7 @@ WORKDIR /go/src/mentor-server
 
 COPY . .
 
-RUN go get -v ./...
+RUN go get ./...
 
 # Tests dependency
 RUN go get gopkg.in/gavv/httpexpect.v2

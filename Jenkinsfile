@@ -3,10 +3,14 @@ node {
     stage('pull changes') {
         git 'https://github.com/ottmartens/mentor-server'
     }
-    
-    stage('build Docker image, run tests') {
+
+     stage('build Docker image, run tests') {
         sh 'cp /srv/mentor-server/.env .'
         sh 'cp /srv/mentor-server/.env ./test'
+    }
+
+    
+    stage('build image, run tests') {
         sh 'docker build -t mentor-server .'
     }
 
